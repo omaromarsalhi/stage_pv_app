@@ -12,8 +12,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -23,7 +21,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public  AuthenticationResponse register(RegisteRequest request) {
+    public  AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())

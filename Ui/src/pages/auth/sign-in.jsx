@@ -1,5 +1,4 @@
 import {
-  Card,
   Input,
   Checkbox,
   Button,
@@ -7,21 +6,56 @@ import {
 } from "@material-tailwind/react";
 import { Link } from "react-router-dom";
 import { func } from "prop-types";
+import { request, setAuthHeader } from "@/helpers/axios_helper.js";
+import { useState } from "react";
 
 
 
-
-function show(){
-  console.log("ali");
-}
 
 export function SignIn() {
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    agreeToTerms: false
+  });
+
+  let onChangeHandler = (event) => {
+    const { name, value } = event.target;
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  let onLogin = (e) => {
+    console.log(formData);
+    e.preventDefault();
+    request(
+      "POST",
+      "auth/login",
+      {
+        email: formData.email,
+        password: formData.password
+      }).then(
+      (response) => {
+        setAuthHeader(response.data.token);
+        console.log("done");
+      }).catch(
+      (error) => {
+        setAuthHeader(null);
+      }
+    );
+  };
+
+
   return (
     <section className="m-8 flex gap-4">
       <div className="w-full lg:w-3/5 mt-24">
         <div className="text-center">
           <Typography variant="h2" className="font-bold mb-4">Sign In</Typography>
-          <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and password to Sign In.</Typography>
+          <Typography variant="paragraph" color="blue-gray" className="text-lg font-normal">Enter your email and
+            password to Sign In.</Typography>
         </div>
         <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
           <div className="mb-1 flex flex-col gap-6">
@@ -29,6 +63,8 @@ export function SignIn() {
               Your email
             </Typography>
             <Input
+              name="email"
+              onChange={onChangeHandler}
               size="lg"
               placeholder="name@mail.com"
               className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
@@ -40,6 +76,8 @@ export function SignIn() {
               Password
             </Typography>
             <Input
+              name="password"
+              onChange={onChangeHandler}
               type="password"
               size="lg"
               placeholder="********"
@@ -49,28 +87,9 @@ export function SignIn() {
               }}
             />
           </div>
-          <Checkbox
-            label={
-              <Typography
-                variant="small"
-                color="gray"
-                className="flex items-center justify-start font-medium"
-              >
-                I agree the&nbsp;
-                <a
-                  href="#"
-                  className="font-normal text-black transition-colors hover:text-gray-900 underline"
-                >
-                  Terms and Conditions
-                </a>
-              </Typography>
-            }
-            containerProps={{ className: "-ml-2.5" }}
-          />
-          <Button onClick={show} className="mt-6" fullWidth>
+          <Button onClick={onLogin} className="mt-6" fullWidth>
             Sign In
           </Button>
-
           <div className="flex items-center justify-between gap-2 mt-6">
             <Typography variant="small" className="font-medium text-gray-900">
               <a href="#">
