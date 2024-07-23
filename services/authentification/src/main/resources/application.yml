@@ -9,6 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     database: postgresql
     database-platform: org.hibernate.dialect.PostgreSQLDialect
   flyway:
@@ -18,3 +20,4 @@ spring:
     baseline-version: 0
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
+
