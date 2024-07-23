@@ -3,9 +3,12 @@ package com.stage.authentification.auth;
 
 import com.stage.authentification.exeption.UserNotFoundException;
 import com.stage.authentification.jwt.JwtService;
+import com.stage.authentification.token.TokenBlackList;
+import com.stage.authentification.token.TokenBlackListRepository;
 import com.stage.authentification.user.Role;
 import com.stage.authentification.user.User;
 import com.stage.authentification.user.UserRepository;
+import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,15 +18,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.security.sasl.AuthenticationException;
+import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
     private final UserRepository userRepository;
+    private final TokenBlackListRepository tokenBlackListRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = User.builder()
@@ -36,8 +42,12 @@ public class AuthenticationService {
 
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken);
+        return new AuthenticationResponse(jwtToken,jwtToken);
     }
+
+
+
+
 
     public AuthenticationResponse login(AuthenticationRequest request) {
         try {
@@ -52,7 +62,31 @@ public class AuthenticationService {
         }
 
         var user = userRepository.findByEmail(request.email()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return generateTokens(user);
+    }
+
+    public AuthenticationResponse refresh(RefreshTokenRequest request) {
+
+        var user = userRepository.findByEmail(request.username()).orElseThrow(() -> new UserNotFoundException("User not found"));
+        return generateTokens(user);
+    }
+
+    // todo i need to expire the expired tokens in the database then add the new ones and send them to the user
+
+    private AuthenticationResponse generateTokens(User user) {
         var jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken);
+        var tokenBlackList = TokenBlackList.builder()
+                .jti(jwtService.extractClaim(jwtToken, Claims::getId))
+                .user(user)
+                .build();
+        tokenBlackListRepository.save(tokenBlackList);
+
+        var jwtRefreshToken = jwtService.generateRefreshToken(user.getEmail());
+        var refreshTokenBlackList = TokenBlackList.builder()
+                .jti(jwtService.extractClaim(jwtRefreshToken, Claims::getId))
+                .user(user)
+                .build();
+        tokenBlackListRepository.save(refreshTokenBlackList);
+        return new AuthenticationResponse(jwtToken,jwtRefreshToken);
     }
 }

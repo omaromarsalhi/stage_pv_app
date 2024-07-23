@@ -13,6 +13,14 @@ export const setAuthHeader = (token) => {
     }
 };
 
+export const setRefreshHeader = (token) => {
+    if (token !== null) {
+        window.localStorage.setItem("refresh_token", token);
+    } else {
+        window.localStorage.removeItem("refresh_token");
+    }
+};
+
 axios.defaults.baseURL = 'http://localhost:8080/api/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 

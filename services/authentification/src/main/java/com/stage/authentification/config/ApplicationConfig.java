@@ -74,4 +74,6 @@ public class ApplicationConfig {
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
+
+
 }

@@ -6,7 +6,7 @@ import {
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import { func } from "prop-types";
-import { request, setAuthHeader } from "@/helpers/axios_helper.js";
+import { request, setAuthHeader, setRefreshHeader } from "@/helpers/axios_helper.js";
 import { useState } from "react";
 
 
@@ -45,6 +45,7 @@ export function SignIn() {
       }).then(
       (response) => {
         setAuthHeader(response.data.token);
+        setRefreshHeader(response.data.refreshToken);
         navigate('/dashboard/profile')
       }).catch(
       (error) => {
