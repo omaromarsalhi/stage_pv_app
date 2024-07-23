@@ -8,4 +8,3 @@ create table if not exists users
     password   varchar,
     role       varchar
 );
-
