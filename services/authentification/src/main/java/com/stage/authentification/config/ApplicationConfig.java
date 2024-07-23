@@ -1,6 +1,7 @@
 package com.stage.authentification.config;
 
 
+import com.stage.authentification.exeption.UserNotFoundException;
 import com.stage.authentification.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +31,7 @@ public class ApplicationConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         return username -> userRepository.findByEmail(username)
-                .orElseThrow(()-> new UsernameNotFoundException("User not found"));
+                .orElseThrow(()-> new UserNotFoundException("User not found"));
     }
 
     @Bean

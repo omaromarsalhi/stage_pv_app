@@ -1,5 +1,6 @@
 package com.stage.authentification.handler;
 
+import com.stage.authentification.exeption.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -29,6 +30,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errors);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<?> handleException(UserNotFoundException exp) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("user",exp.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(errors);
+    }
+
 //
 //    private void handlePaymentException(BusinessException exp) {
 //

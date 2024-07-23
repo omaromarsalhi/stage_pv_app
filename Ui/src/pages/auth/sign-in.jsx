@@ -4,47 +4,53 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { func } from "prop-types";
 import { request, setAuthHeader } from "@/helpers/axios_helper.js";
 import { useState } from "react";
 
 
-
-
 export function SignIn() {
 
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    agreeToTerms: false
+    email: "",
+    password: "",
+    agreeToTerms: false,
   });
+
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+    user: "",
+  });
+
+  const navigate = useNavigate();
 
   let onChangeHandler = (event) => {
     const { name, value } = event.target;
     setFormData(prevState => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
   };
 
   let onLogin = (e) => {
-    console.log(formData);
     e.preventDefault();
     request(
       "POST",
       "auth/login",
       {
         email: formData.email,
-        password: formData.password
+        password: formData.password,
       }).then(
       (response) => {
         setAuthHeader(response.data.token);
-        console.log("done");
+        navigate('/dashboard/profile')
       }).catch(
       (error) => {
         setAuthHeader(null);
-      }
+        setErrors(error.response.data);
+      },
     );
   };
 
@@ -58,6 +64,21 @@ export function SignIn() {
             password to Sign In.</Typography>
         </div>
         <form className="mt-8 mb-2 mx-auto w-80 max-w-screen-lg lg:w-1/2">
+          {errors.email && (
+            <div className="mb-4 text-red-500 text-center">
+              <Typography variant="h6">{errors.email}</Typography>
+            </div>
+          )}
+          {errors.password && (
+            <div className="mb-4 text-red-500 text-center">
+              <Typography variant="h6">{errors.password}</Typography>
+            </div>
+          )}
+          {errors.user && (
+            <div className="mb-4 text-red-500 text-center">
+              <Typography variant="h6">{errors.user}</Typography>
+            </div>
+          )}
           <div className="mb-1 flex flex-col gap-6">
             <Typography variant="small" color="blue-gray" className="-mb-3 font-medium">
               Your email
