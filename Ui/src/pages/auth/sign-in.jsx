@@ -34,27 +34,42 @@ export function SignIn() {
     }));
   };
 
+  // let onLogin = (e) => {
+  //   e.preventDefault();
+  //   request(
+  //     "POST",
+  //     "auth/login",
+  //     {
+  //       email: formData.email,
+  //       password: formData.password,
+  //     }).then(
+  //     (response) => {
+  //       setAuthHeader(response.data.token);
+  //       setRefreshHeader(response.data.refreshToken);
+  //       navigate('/dashboard/profile')
+  //     }).catch(
+  //     (error) => {
+  //       setAuthHeader(null);
+  //       setErrors(error.response.data);
+  //     },
+  //   );
+  // };
+
+
   let onLogin = (e) => {
     e.preventDefault();
     request(
       "POST",
-      "auth/login",
-      {
-        email: formData.email,
-        password: formData.password,
-      }).then(
+      "test/test_test",
+    ).then(
       (response) => {
-        setAuthHeader(response.data.token);
-        setRefreshHeader(response.data.refreshToken);
-        navigate('/dashboard/profile')
+        console.log(response);
       }).catch(
       (error) => {
-        setAuthHeader(null);
-        setErrors(error.response.data);
+        console.log(error);
       },
     );
   };
-
 
   return (
     <section className="m-8 flex gap-4">

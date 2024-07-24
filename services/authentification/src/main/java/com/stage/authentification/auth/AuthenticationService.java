@@ -1,6 +1,7 @@
 package com.stage.authentification.auth;
 
 
+import com.stage.authentification.exeption.TokenExpiredException;
 import com.stage.authentification.exeption.UserNotFoundException;
 import com.stage.authentification.jwt.JwtService;
 import com.stage.authentification.token.TokenBlackList;
@@ -17,8 +18,6 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.security.sasl.AuthenticationException;
-import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -42,11 +41,8 @@ public class AuthenticationService {
 
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken,jwtToken);
+        return new AuthenticationResponse(jwtToken, jwtToken);
     }
-
-
-
 
 
     public AuthenticationResponse login(AuthenticationRequest request) {
@@ -66,12 +62,10 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse refresh(RefreshTokenRequest request) {
-
         var user = userRepository.findByEmail(request.username()).orElseThrow(() -> new UserNotFoundException("User not found"));
-        return generateTokens(user);
+        tokenBlackListRepository.expireTokenByUser(user.getIdUser(),jwtService.extractClaim(request.refreshToken(), Claims::getId));
+        return generateMainToken(user, request.refreshToken());
     }
-
-    // todo i need to expire the expired tokens in the database then add the new ones and send them to the user
 
     private AuthenticationResponse generateTokens(User user) {
         var jwtToken = jwtService.generateToken(user);
@@ -87,6 +81,20 @@ public class AuthenticationService {
                 .user(user)
                 .build();
         tokenBlackListRepository.save(refreshTokenBlackList);
-        return new AuthenticationResponse(jwtToken,jwtRefreshToken);
+        return new AuthenticationResponse(jwtToken, jwtRefreshToken);
     }
+
+    private AuthenticationResponse generateMainToken(User user, String refreshToken) {
+        if (jwtService.isTokenValid(refreshToken, user)) {
+            var jwtToken = jwtService.generateToken(user);
+            var tokenBlackList = TokenBlackList.builder()
+                    .jti(jwtService.extractClaim(jwtToken, Claims::getId))
+                    .user(user)
+                    .build();
+            tokenBlackListRepository.save(tokenBlackList);
+            return new AuthenticationResponse(jwtToken, refreshToken);
+        } else
+            throw new TokenExpiredException("invalid refresh token");
+    }
+
 }
