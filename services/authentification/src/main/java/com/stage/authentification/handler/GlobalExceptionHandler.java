@@ -1,6 +1,8 @@
 package com.stage.authentification.handler;
 
+import com.stage.authentification.exeption.TokenExpiredException;
 import com.stage.authentification.exeption.UserNotFoundException;
+import jakarta.servlet.ServletException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -23,7 +25,7 @@ public class GlobalExceptionHandler {
                 .forEach(error -> {
                     String fieldName = ((FieldError) error).getField();
                     String errorMessage = error.getDefaultMessage();
-                    errors.put(fieldName,errorMessage);
+                    errors.put(fieldName, errorMessage);
                 });
 
         return ResponseEntity
@@ -34,11 +36,33 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<?> handleException(UserNotFoundException exp) {
         Map<String, String> errors = new HashMap<>();
-        errors.put("user",exp.getMessage());
+        errors.put("user", exp.getMessage());
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(errors);
     }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<?> handleTokenExpiredException(TokenExpiredException exp) {
+        System.out.println("access token expired");
+        Map<String, String> errors = new HashMap<>();
+        errors.put("invalid_token", exp.getMessage());
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(errors);
+    }
+
+//    @ExceptionHandler(ServletException.class)
+//    public ResponseEntity<?> handleException(ServletException exp) {
+//        Map<String, Boolean> errors = new HashMap<>();
+//        errors.put("invalid_token", true);
+//        return ResponseEntity
+//                .status(HttpStatus.UNAUTHORIZED)
+//                .body(errors);
+//    }
+
+
+
 
 //
 //    private void handlePaymentException(BusinessException exp) {
