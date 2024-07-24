@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 import java.util.Set;
 
 @Entity
-@Table(name = "modules")
-public class Module {
+@Table(name = "academicModules")
+public class AcademicModule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idModule;
@@ -21,7 +21,7 @@ public class Module {
     @JoinColumn(name = "idUE", nullable = false)
     private UniteEnseignement uniteEnseignement;
 
-    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "academicModule", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Mark> marks;
 
     // Getters and setters

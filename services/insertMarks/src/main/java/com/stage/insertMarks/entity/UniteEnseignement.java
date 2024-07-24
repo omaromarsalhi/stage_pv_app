@@ -15,7 +15,7 @@ public class UniteEnseignement {
     private String name;
 
     @OneToMany(mappedBy = "uniteEnseignement", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Module> modules;
+    private Set<AcademicModule> academicModules;
 
     // Getters and setters
     public Long getIdUE() {
@@ -34,12 +34,12 @@ public class UniteEnseignement {
         this.name = name;
     }
 
-    public Set<Module> getModules() {
-        return modules;
+    public Set<AcademicModule> getModules() {
+        return academicModules;
     }
 
-    public void setModules(Set<Module> modules) {
-        this.modules = modules;
+    public void setModules(Set<AcademicModule> academicModules) {
+        this.academicModules = academicModules;
     }
 }
 

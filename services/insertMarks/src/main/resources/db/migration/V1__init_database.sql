@@ -1,21 +1,21 @@
-create table if not exists UniteEnseignement
+CREATE TABLE IF NOT EXISTS UniteEnseignement
 (
-    idUE INTEGER PRIMARY KEY,
+    idUE BIGINT PRIMARY KEY,
     name VARCHAR(255) NOT NULL
     );
 
-create table if not exists modules
+CREATE TABLE IF NOT EXISTS academicModules
 (
-    idModule INTEGER PRIMARY KEY,
+    idModule BIGINT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     coefficient FLOAT NOT NULL,
-    idUE INTEGER,
+    idUE BIGINT,
     FOREIGN KEY (idUE) REFERENCES UniteEnseignement(idUE)
     );
 
-create table if not exists users
+CREATE TABLE IF NOT EXISTS users
 (
-    idUser INTEGER PRIMARY KEY,
+    idUser BIGINT PRIMARY KEY,
     identifier VARCHAR(30) NOT NULL,
     firstname VARCHAR(255) NOT NULL,
     lastname VARCHAR(255) NOT NULL,
@@ -24,14 +24,14 @@ create table if not exists users
     role VARCHAR(50) NOT NULL
     );
 
-create table if not exists marks
+CREATE TABLE IF NOT EXISTS marks
 (
-    idMark INTEGER PRIMARY KEY,
+    idMark BIGINT PRIMARY KEY,
     markCc FLOAT,
     markExam FLOAT,
     markTp FLOAT,
-    idModule INTEGER,
-    idUser INTEGER,
-    FOREIGN KEY (idModule) REFERENCES modules(idModule),
+    idModule BIGINT,
+    idUser BIGINT,
+    FOREIGN KEY (idModule) REFERENCES academicModules(idModule),
     FOREIGN KEY (idUser) REFERENCES users(idUser)
     );

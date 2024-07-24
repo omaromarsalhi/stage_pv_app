@@ -20,7 +20,7 @@ public class Mark {
 
     @ManyToOne
     @JoinColumn(name = "idModule", nullable = false)
-    private Module module;
+    private AcademicModule academicModule;
 
     // Getters and setters
     public Long getIdMark() {
@@ -55,11 +55,11 @@ public class Mark {
         this.markTp = markTp;
     }
 
-    public Module getModule() {
-        return module;
+    public AcademicModule getAcademicModule() {
+        return academicModule;
     }
 
-    public void setModule(Module module) {
-        this.module = module;
+    public void setAcademicModule(AcademicModule academicModule) {
+        this.academicModule = academicModule;
     }
 }
