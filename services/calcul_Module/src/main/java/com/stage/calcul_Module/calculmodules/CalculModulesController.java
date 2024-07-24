@@ -27,5 +27,5 @@ public class CalculModulesController {
             @RequestBody ModuleMarksRequest request
     ){
         Map<String, Object> result = calculModulesService.calculateModuleAverage(request);
-        return ResponseEntity.ok(result);    }
+        return ResponseEntity.ok(result);}
 }

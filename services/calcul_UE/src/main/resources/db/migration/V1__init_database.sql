@@ -21,3 +21,9 @@ create table if not exists marks
     idModule INTEGER,
     FOREIGN KEY (idModule) REFERENCES modules(idModule)
 );
+create table if not exists StudentMark
+(
+    idStudent INTEGER,
+    idMark INTEGER,
+    FOREIGN KEY (idMark) REFERENCES marks(idMark)
+);

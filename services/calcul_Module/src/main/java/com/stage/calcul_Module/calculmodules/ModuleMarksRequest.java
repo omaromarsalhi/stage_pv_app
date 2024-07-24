@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record ModuleMarksRequest(
         @NotNull
-        int idmodule
+        int idmodule,
+        @NotNull
+        int idstudent
 ) {
 }
