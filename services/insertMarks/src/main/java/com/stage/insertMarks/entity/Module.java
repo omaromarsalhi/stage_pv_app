@@ -1,15 +1,18 @@
 package com.stage.insertMarks.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.util.Set;
 
 @Entity
-@Table(name = "academicModules")
-public class AcademicModule {
+@Table(name = "Module")
+public class Module {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idModule;
+    private Integer idModule;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -19,17 +22,20 @@ public class AcademicModule {
 
     @ManyToOne
     @JoinColumn(name = "idUE", nullable = false)
+    @JsonBackReference
     private UniteEnseignement uniteEnseignement;
 
-    @OneToMany(mappedBy = "academicModule", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @JsonManagedReference
     private Set<Mark> marks;
 
     // Getters and setters
-    public Long getIdModule() {
+    public Integer getIdModule() {
         return idModule;
     }
 
-    public void setIdModule(Long idModule) {
+    public void setIdModule(Integer idModule) {
         this.idModule = idModule;
     }
 

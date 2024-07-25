@@ -1,5 +1,6 @@
 package com.stage.insertMarks.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Set;
@@ -9,20 +10,21 @@ import java.util.Set;
 public class UniteEnseignement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idUE;
+    private Integer idUE;
 
     @Column(name = "name", nullable = false)
     private String name;
 
     @OneToMany(mappedBy = "uniteEnseignement", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AcademicModule> academicModules;
+    @JsonIgnore
+    private Set<Module> module;
 
     // Getters and setters
-    public Long getIdUE() {
+    public Integer getIdUE() {
         return idUE;
     }
 
-    public void setIdUE(Long idUE) {
+    public void setIdUE(Integer idUE) {
         this.idUE = idUE;
     }
 
@@ -34,12 +36,12 @@ public class UniteEnseignement {
         this.name = name;
     }
 
-    public Set<AcademicModule> getModules() {
-        return academicModules;
+    public Set<Module> getModule() {
+        return module;
     }
 
-    public void setModules(Set<AcademicModule> academicModules) {
-        this.academicModules = academicModules;
+    public void setModule(Set<Module> module) {
+        this.module = module;
     }
 }
 

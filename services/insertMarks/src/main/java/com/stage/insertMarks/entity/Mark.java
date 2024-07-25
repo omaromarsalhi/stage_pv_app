@@ -1,13 +1,14 @@
 package com.stage.insertMarks.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "marks")
+@Table(name = "mark")
 public class Mark {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idMark;
+    private Integer idMark;
 
     @Column(name = "markCc")
     private Float markCc;
@@ -20,14 +21,15 @@ public class Mark {
 
     @ManyToOne
     @JoinColumn(name = "idModule", nullable = false)
-    private AcademicModule academicModule;
+    @JsonIgnore
+    private Module module;
 
     // Getters and setters
-    public Long getIdMark() {
+    public Integer getIdMark() {
         return idMark;
     }
 
-    public void setIdMark(Long idMark) {
+    public void setIdMark(Integer idMark) {
         this.idMark = idMark;
     }
 
@@ -55,11 +57,11 @@ public class Mark {
         this.markTp = markTp;
     }
 
-    public AcademicModule getAcademicModule() {
-        return academicModule;
+    public Module getModule() {
+        return module;
     }
 
-    public void setAcademicModule(AcademicModule academicModule) {
-        this.academicModule = academicModule;
+    public void setModule(Module module) {
+        this.module = module;
     }
 }
