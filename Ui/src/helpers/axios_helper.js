@@ -21,7 +21,7 @@ export const setRefreshHeader = (token) => {
     }
 };
 
-axios.defaults.baseURL = 'http://localhost:8080/api/';
+axios.defaults.baseURL = 'http://localhost:8888/api/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const request = (method, url, data) => {
@@ -30,7 +30,6 @@ export const request = (method, url, data) => {
     if (getAuthToken() !== null && getAuthToken() !== "null") {
         headers = {'Authorization': `Bearer ${getAuthToken()}`};
     }
-
     return axios({
         method: method,
         url: url,

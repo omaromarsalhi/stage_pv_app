@@ -64,8 +64,6 @@ CREATE TABLE IF NOT EXISTS PlanEtudeUniteEnseignement
 );
 
 
-
-
 -- Create the Mark table
 CREATE TABLE IF NOT EXISTS Mark
 (
