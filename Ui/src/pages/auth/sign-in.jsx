@@ -44,10 +44,19 @@ export function SignIn() {
         password: formData.password,
       }).then(
       (response) => {
-        console.log(response.data);
         setAuthHeader(response.data.token);
         setRefreshHeader(response.data.refreshToken);
-        navigate('/dashboard/profile')
+
+        navigate('/dashboard/profile', {
+          state: {
+            identifier: response.data.identifier,
+            firstname: response.data.firstname,
+            lastname: response.data.lastname,
+            email: response.data.email,
+            role: response.data.role,
+          }
+        });
+
       }).catch(
       (error) => {
         setAuthHeader(null);

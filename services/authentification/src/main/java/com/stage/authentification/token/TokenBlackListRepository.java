@@ -17,4 +17,16 @@ public interface TokenBlackListRepository extends JpaRepository<TokenBlackList, 
             and t.jti != :jti
             """)
     void expireTokenByUser(Integer idUser,String jti);
+
+
+
+    @Modifying
+    @Transactional
+    @Query("""
+            UPDATE TokenBlackList t set t.expiresAt=CURRENT_TIMESTAMP WHERE t.user.idUser=:idUser 
+            """)
+    void expireAllTokensByUser(Integer idUser);
+
+    @Query("SELECT COUNT(t) > 0 FROM TokenBlackList t WHERE t.jti= :jti AND t.expiresAt IS NULL ")
+    boolean existsNonExpiredTokens(String jti);
 }

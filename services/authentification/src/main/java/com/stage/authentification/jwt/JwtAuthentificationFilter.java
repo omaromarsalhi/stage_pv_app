@@ -1,5 +1,7 @@
 package com.stage.authentification.jwt;
 
+import com.stage.authentification.token.TokenBlackListRepository;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -24,6 +26,7 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final TokenBlackListRepository tokenBlackListRepository;
 
     @Override
     protected void doFilterInternal(
@@ -41,7 +44,6 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
             final String jwtToken = header.substring(7);
             final String username = jwtService.extractUsername(jwtToken);
-            System.out.println("username: " + username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails user = userDetailsService.loadUserByUsername(username);
@@ -60,9 +62,11 @@ public class JwtAuthentificationFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (ExpiredJwtException e) {
+
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
             response.getWriter().write("{\"token\": \"JWT Token has expired\"}");
+
         }
     }
 }

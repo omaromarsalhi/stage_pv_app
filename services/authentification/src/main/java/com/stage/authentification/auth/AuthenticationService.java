@@ -18,6 +18,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,8 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public ArrayList<String> register(RegisterRequest request) {
+        var list = new ArrayList<String>();
         var user = User.builder()
                 .firstName(request.firstName())
                 .lastName(request.lastName())
@@ -41,7 +44,9 @@ public class AuthenticationService {
 
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
-        return new AuthenticationResponse(jwtToken, jwtToken);
+        list.add(jwtToken);
+        list.add(jwtToken);
+        return list;
     }
 
 
@@ -58,16 +63,27 @@ public class AuthenticationService {
         }
 
         var user = userRepository.findByEmail(request.email()).orElseThrow(() -> new UserNotFoundException("User not found"));
-        return generateTokens(user);
+        tokenBlackListRepository.expireAllTokensByUser(user.getIdUser());
+        var tokes = generateTokens(user);
+        return new AuthenticationResponse(
+                tokes.get(0),
+                tokes.get(1),
+                user.getIdentifier(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                user.getRole().name()
+        );
     }
 
-    public AuthenticationResponse refresh(RefreshTokenRequest request) {
+    public RefreshResponse refresh(RefreshTokenRequest request) {
         var user = userRepository.findByEmail(request.username()).orElseThrow(() -> new UserNotFoundException("User not found"));
         tokenBlackListRepository.expireTokenByUser(user.getIdUser(),jwtService.extractClaim(request.refreshToken(), Claims::getId));
         return generateMainToken(user, request.refreshToken());
     }
 
-    private AuthenticationResponse generateTokens(User user) {
+    private ArrayList<String> generateTokens(User user) {
+        var list = new ArrayList<String>();
         var jwtToken = jwtService.generateToken(user);
         var tokenBlackList = TokenBlackList.builder()
                 .jti(jwtService.extractClaim(jwtToken, Claims::getId))
@@ -81,10 +97,13 @@ public class AuthenticationService {
                 .user(user)
                 .build();
         tokenBlackListRepository.save(refreshTokenBlackList);
-        return new AuthenticationResponse(jwtToken, jwtRefreshToken);
+
+        list.add(jwtToken);
+        list.add(jwtRefreshToken);
+        return list;
     }
 
-    private AuthenticationResponse generateMainToken(User user, String refreshToken) {
+    private RefreshResponse generateMainToken(User user, String refreshToken) {
         if (jwtService.isTokenValid(refreshToken, user)) {
             var jwtToken = jwtService.generateToken(user);
             var tokenBlackList = TokenBlackList.builder()
@@ -92,7 +111,8 @@ public class AuthenticationService {
                     .user(user)
                     .build();
             tokenBlackListRepository.save(tokenBlackList);
-            return new AuthenticationResponse(jwtToken, refreshToken);
+
+            return new RefreshResponse(jwtToken, refreshToken);
         } else
             throw new TokenExpiredException("invalid refresh token");
     }

@@ -37,6 +37,8 @@ public class User implements UserDetails {
 
     private String password;
 
+    private int idgrade;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 

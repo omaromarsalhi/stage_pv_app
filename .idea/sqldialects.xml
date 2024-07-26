@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/services/PV/src/main/resources/db/migration/V1__init_database.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/services/PV/src/main/resources/db/migration/V2__init_data.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/services/authentification/src/main/resources/db/migration/V5__init_data.sql" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>
