@@ -3,7 +3,7 @@ package com.stage.gateway.jwt;
 
 import com.stage.gateway.exeption.TokenMissingException;
 import io.jsonwebtoken.ExpiredJwtException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
@@ -20,9 +20,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Component
+@AllArgsConstructor
 public class JwtAuthenticationFilter implements WebFilter {
 
-    @Autowired
+
     private JwtService jwtService;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
@@ -67,56 +68,3 @@ public class JwtAuthenticationFilter implements WebFilter {
             throw new TokenMissingException("missing token");
     }
 }
-
-
-//
-//import com.stage.gateway.exeption.TokenMissingException;
-//import io.jsonwebtoken.ExpiredJwtException;
-//import jakarta.servlet.FilterChain;
-//import jakarta.servlet.ServletException;
-//import jakarta.servlet.http.HttpServletRequest;
-//import jakarta.servlet.http.HttpServletResponse;
-//import org.springframework.stereotype.Component;
-//import org.springframework.web.filter.OncePerRequestFilter;
-//
-//import java.io.IOException;
-//
-//
-//@Component
-//public class JwtAuthentificationFilter extends OncePerRequestFilter {
-//
-//    private JwtService jwtService;
-//
-//    @Override
-//    protected void doFilterInternal(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            FilterChain filterChain
-//    ) throws ServletException, IOException {
-//        try {
-//            final String header = request.getHeader("Authorization");
-//
-//            if (header == null || !header.startsWith("Bearer")) {
-//                throw new TokenMissingException("JWT does not exist b1");
-//            }
-//
-//            String token = header.substring(7);
-//
-//            if (!jwtService.isTokenValid(token)) {
-//                throw new TokenMissingException("JWT does not exist b2");
-//            }
-//        }catch (TokenMissingException  e) {
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.setContentType("application/json");
-////            response.getWriter().write("{\"token\": \"JWT does not exist\"}");
-//            response.getWriter().write("{\"token\": \""+e.getMessage()+"\"}");
-//        }
-//        catch (ExpiredJwtException e) {
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.setContentType("application/json");
-//            response.getWriter().write("{\"token\": \"JWT Token has expired banana\"}");
-//        }
-//
-//
-//    }
-//}
