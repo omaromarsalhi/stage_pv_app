@@ -14,7 +14,7 @@ public class Test {
 
 
     @PostMapping("/test_test")
-    public String register(
+    public String test(
     ) {
         return "hi omar";
     }

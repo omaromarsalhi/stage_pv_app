@@ -11,3 +11,5 @@ spring:
           uri: lb:http://AUTHENTIFICATION
           predicates:
             - Path=/api/auth/**
+  main:
+    allow-bean-definition-overriding: true
