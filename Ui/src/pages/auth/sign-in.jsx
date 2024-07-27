@@ -1,16 +1,18 @@
 import {
   Input,
-  Checkbox,
   Button,
   Typography,
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
-import { func } from "prop-types";
 import { request, setAuthHeader, setRefreshHeader } from "@/helpers/axios_helper.js";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useDispatch } from "react-redux";
 
 
 export function SignIn() {
+
+  const dispatch = useDispatch();
+
 
   const [formData, setFormData] = useState({
     email: "",
@@ -47,15 +49,16 @@ export function SignIn() {
         setAuthHeader(response.data.token);
         setRefreshHeader(response.data.refreshToken);
 
-        navigate('/dashboard/profile', {
-          state: {
-            identifier: response.data.identifier,
-            firstname: response.data.firstname,
-            lastname: response.data.lastname,
-            email: response.data.email,
-            role: response.data.role,
-          }
-        });
+        const userData = {
+          identifier: response.data.identifier,
+          firstname: response.data.firstname,
+          lastname: response.data.lastname,
+          email: response.data.email,
+          role: response.data.role,
+        };
+
+        dispatch({ type: 'SET_USER', payload: userData });
+        navigate("/dashboard/profile");
 
       }).catch(
       (error) => {
@@ -64,7 +67,6 @@ export function SignIn() {
       },
     );
   };
-
 
 
   return (

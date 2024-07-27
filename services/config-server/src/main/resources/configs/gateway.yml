@@ -11,5 +11,11 @@ spring:
           uri: lb:http://AUTHENTIFICATION
           predicates:
             - Path=/api/auth/**
-  main:
-    allow-bean-definition-overriding: true
+        - id: authentification
+          uri: lb:http://AUTHENTIFICATION
+          predicates:
+            - Path=/api/users/**
+        - id: pv
+          uri: lb:http://PV
+          predicates:
+            - Path=/api/generate-pv/**

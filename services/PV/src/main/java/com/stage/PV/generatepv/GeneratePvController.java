@@ -3,10 +3,7 @@ package com.stage.PV.generatepv;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -19,11 +16,12 @@ public class GeneratePvController {
     private final GeneratePvService generatePvService;
 
 
-    @PostMapping("/get-user")
+    @PostMapping("/getStudents")
     public ResponseEntity<?> authenticate(
-            @RequestBody GeneratePvRequest request
+            @RequestBody StudentsRequest request,
+            @RequestHeader("Authorization") String headerValue
     ){
-        return ResponseEntity.ok(generatePvService.authenticate(request));
+        return ResponseEntity.ok(generatePvService.retrieveStudents(request,headerValue));
     }
 
 }

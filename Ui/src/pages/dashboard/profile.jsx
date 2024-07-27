@@ -9,22 +9,13 @@ import {
   PencilIcon,
 } from "@heroicons/react/24/solid";
 import { ProfileInfoCard } from "@/widgets/cards";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
+
+import { useSelector } from "react-redux";
 
 
 export function Profile() {
 
-  const location = useLocation();
-
-  const [state, setState] = useState({
-    identifier: location.state.identifier,
-    firstname: location.state.firstname,
-    lastname: location.state.lastname,
-    email: location.state.email,
-    role: location.state.role,
-  });
-
+  const user = useSelector((state) => state.user);
 
   return (
     <>
@@ -45,13 +36,13 @@ export function Profile() {
               />
               <div>
                 <Typography variant="h5" color="blue-gray" className="mb-1">
-                  {state.firstname} {state.lastname}
+                  {user.firstname} {user.lastname}
                 </Typography>
                 <Typography
                   variant="small"
                   className="font-normal text-blue-gray-600"
                 >
-                  {state.role}
+                  {user.role}
                 </Typography>
               </div>
             </div>
@@ -62,9 +53,9 @@ export function Profile() {
               title="Profile Information"
               description="Hi, I'm Alec Thompson, Decisions: If you can't decide, the answer is no. If two equally difficult paths, choose the one more painful in the short term (pain avoidance is creating an illusion of equality)."
               details={{
-                "first name": state.firstname,
+                "first name": user.firstname,
                 mobile: "(44) 123 1234 123",
-                email: state.email,
+                email: user.email,
                 location: "TUNISIA",
                 social: (
                   <div className="flex items-center gap-4">

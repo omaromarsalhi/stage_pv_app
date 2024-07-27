@@ -1,22 +1,33 @@
 package com.stage.PV.generatepv;
 
 
-import com.stage.PV.authentication.AuthenticateAndGetUserClient;
+import com.stage.PV.authentication.GetUsers;
 import com.stage.PV.authentication.JwtTokenContextHolder;
+import com.stage.PV.authentication.UserResponse;
+import com.stage.PV.grade.GradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class GeneratePvService {
 
-    private AuthenticateAndGetUserClient authenticateAndGetUserClient;
+    private final GetUsers getUsers;
+    private final GradeRepository gradeRepository;
 
-    public int authenticate(GeneratePvRequest request) {
-        JwtTokenContextHolder.setToken(request.token());
-        var response = this.authenticateAndGetUserClient.authenticateAndGetUser().orElseThrow(
-                () -> new RuntimeException("No authenticated user found")
+
+    public List<UserResponse> retrieveStudents(StudentsRequest request, String token) {
+
+        JwtTokenContextHolder.setToken(token.substring(7));
+
+        var grade=gradeRepository.findByName(request.grade()).orElseThrow(
+                () -> new IllegalArgumentException("Invalid grade")
         );
-        return response.idUser();
+
+        return this.getUsers.getStudents(grade.getIdGrade()).orElseThrow(
+                () -> new RuntimeException("No authenticated user found"))
+                ;
     }
 }

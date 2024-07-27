@@ -33,16 +33,14 @@ public class JwtAuthenticationFilter implements WebFilter {
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         try {
             String path = exchange.getRequest().getURI().getPath();
-            // Skip JWT validation for excluded paths
             if (isExcluded(path)) {
                 return chain.filter(exchange);
             }
 
             String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
 
-            if (token == null || !jwtService.isTokenValid(token)) {
-                exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                return exchange.getResponse().setComplete();
+            if (token == null || jwtService.isTokenValid(token)) {
+                throw new TokenMissingException("expired");
             }
 
             return chain.filter(exchange);

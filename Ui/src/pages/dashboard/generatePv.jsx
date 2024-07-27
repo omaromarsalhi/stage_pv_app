@@ -4,24 +4,116 @@ import {
   CardBody,
   Typography,
   Avatar,
-  Chip,
+  Chip, MenuHandler, IconButton, MenuList, MenuItem, Menu,
 } from "@material-tailwind/react";
 import { authorsTableData, projectsTableData } from "@/data";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/outline/index.js";
+import React from "react";
+import { request } from "@/helpers/axios_helper.js";
 
 export function GeneratePv() {
+
+
+  request(
+    "POST",
+    "auth/login",
+    {
+      level: 1,
+      grade: "1A1",
+    }).then(
+    (response) => {
+      console.log(response.data);
+
+      // const userData = {
+      //   identifier: response.data.identifier,
+      //   firstname: response.data.firstname,
+      //   lastname: response.data.lastname,
+      //   email: response.data.email,
+      //   role: response.data.role,
+      // };
+
+
+    }).catch(
+    (error) => {
+    },
+  );
+
+
   return (
     <div className="mt-12 mb-8 flex flex-col gap-12">
       <Card>
-        <CardHeader variant="gradient" color="gray" className="mb-8 p-6">
+        <CardHeader
+          variant="gradient"
+          color="gray"
+          // className="mb-8 p-6"
+          floated={false}
+          shadow={false}
+          className="m-0 flex items-center justify-between p-6"
+        >
           <Typography variant="h6" color="white">
-            Authors Table
+            3A / 3A4 / 2024-2025
           </Typography>
+          <Menu placement="left-start">
+            <MenuHandler>
+              <IconButton size="sm" variant="text" color="white">
+                <EllipsisVerticalIcon
+                  strokeWidth={3}
+                  fill="currenColor"
+                  className="h-6 w-6"
+                />
+              </IconButton>
+            </MenuHandler>
+            <MenuList>
+              <MenuItem>Generate PVs</MenuItem>
+              <MenuItem>
+                <Menu placement="left-start">
+                  <MenuHandler>
+                    <p>Change Level</p>
+                  </MenuHandler>
+                  <MenuList className="max-h-60 overflow-y-auto bg-green-100">
+                    <MenuItem>1A</MenuItem>
+                    <MenuItem>1I</MenuItem>
+                    <MenuItem>2A</MenuItem>
+                    <MenuItem>2P</MenuItem>
+                    <MenuItem>3A</MenuItem>
+                    <MenuItem>3B</MenuItem>
+                    <MenuItem>3AI</MenuItem>
+                    <MenuItem>4SAE</MenuItem>
+                    <MenuItem>4NIDS</MenuItem>
+                    <MenuItem>5SAE</MenuItem>
+                    <MenuItem>5NIDS</MenuItem>
+                  </MenuList>
+                </Menu>
+              </MenuItem>
+              <MenuItem >
+                <Menu placement="left-start">
+                  <MenuHandler>
+                    <p>Change Class</p>
+                  </MenuHandler>
+                    <MenuList className="max-h-60 overflow-y-auto bg-green-100">
+                      <MenuItem>Generate PVs</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                      <MenuItem>Change Class</MenuItem>
+                    </MenuList>
+                </Menu>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </CardHeader>
         <CardBody className="overflow-x-scroll px-0 pt-0 pb-2">
           <table className="w-full min-w-[640px] table-auto">
             <thead>
             <tr>
-              {["author", "function", "status", "employed", ""].map((el) => (
+              {["Student", "Identifier", "Financial Status", "Score", ""].map((el) => (
                 <th
                   key={el}
                   className="border-b border-blue-gray-50 py-3 px-5 text-left"
@@ -91,12 +183,12 @@ export function GeneratePv() {
                         href="#"
                         className="text-xs font-semibold text-blue-gray-600"
                       >
-                        Edit
+                        GeneratePv
                       </Typography>
                     </td>
                   </tr>
                 );
-              }
+              },
             )}
             </tbody>
           </table>
