@@ -12,11 +12,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CalculModulesService {
-    private final ModulesRepository modulesRepository;
-    private final MarksRepository marksRepository;
+    private final ModuleRepository modulesRepository;
+    private final MarkRepository marksRepository;
     private final StudentMarkRepository studentMarkRepository;
 
-    public Map<String, Object> calculateModuleAverage(ModuleMarksRequest request) {
+    public Map<Integer, Float> calculateModuleAverage(ModuleMarksRequest request) {
 
         int moduleId = request.idmodule();
         int studentId = request.idstudent();
@@ -27,7 +27,7 @@ public class CalculModulesService {
                 .map(StudentMark::getIdmark)
                 .collect(Collectors.toList());
 
-        List<Marks> marksList = marksRepository.findAllById(marksIds).stream()
+        List<Mark> marksList = marksRepository.findAllById(marksIds).stream()
                 .filter(mark -> mark.getIdModule() == moduleId)
                 .collect(Collectors.toList());
 
@@ -46,8 +46,8 @@ public class CalculModulesService {
                 .average()
                 .orElse(0.0);
 
-        Map<String, Object> result = new HashMap<>();
-        result.put("average", average);
+        Map<Integer, Float> result = new HashMap<>();
+        result.put(moduleId, (float) average);
 
         return result;
     }

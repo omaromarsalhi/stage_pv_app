@@ -1,5 +1,6 @@
 spring:
-  application:
-    name: calcul_UE
   config:
     import: optional:configserver:http://localhost:8081
+  application:
+    name: gateway
+

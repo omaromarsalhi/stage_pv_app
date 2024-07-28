@@ -4,6 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface MarksRepository extends JpaRepository<Marks,Integer> {
-    List<Marks> findByIdModule(int idModule);
+public interface MarkRepository extends JpaRepository<Mark,Integer> {
+    List<Mark> findByIdModule(int idModule);
 }

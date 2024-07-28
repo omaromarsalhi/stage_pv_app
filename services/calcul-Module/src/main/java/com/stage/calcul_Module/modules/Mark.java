@@ -4,7 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Marks {
+public class Mark {
 
     @Id
     private int idMark;
