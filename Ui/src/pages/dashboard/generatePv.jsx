@@ -6,38 +6,56 @@ import {
   Avatar,
   Chip, MenuHandler, IconButton, MenuList, MenuItem, Menu,
 } from "@material-tailwind/react";
-import { authorsTableData, projectsTableData } from "@/data";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline/index.js";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { request } from "@/helpers/axios_helper.js";
+import { gradesData, levelsData, setUpGeneratePvPage } from "@/loaders/laodStudents.js";
+
 
 export function GeneratePv() {
+  const [authorsTableData, setAuthorsTableData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  setUpGeneratePvPage(1,"1A1")
 
 
-  request(
-    "POST",
-    "/generate-pv/getStudents",
-    {
-      level: 1,
-      grade: "1A1",
-    }).then(
-    (response) => {
-      console.log(response.data);
+  useEffect(() => {
+    request(
+      "POST",
+      "/pv/generate-pv/getStudents",
+      {
+        level: 1,
+        grade: "1A1",
+      }).then(
+      (response) => {
+        setIsLoading(false);
+        const formattedData = response.data.map(student => ({
+          img: "/img/team-2.jpeg",
+          name: student.firstName + " " + student.lastName,
+          email: student.email,
+          identifier: student.identifier,
+          online: true,
+          score: "-",
+        }));
 
-      // const userData = {
-      //   identifier: response.data.identifier,
-      //   firstname: response.data.firstname,
-      //   lastname: response.data.lastname,
-      //   email: response.data.email,
-      //   role: response.data.role,
-      // };
+        setAuthorsTableData(formattedData);
+
+      }).catch(
+      (error) => {
+        console.log(error);
+      },
+    );
+
+  }, []);
 
 
-    }).catch(
-    (error) => {
-      console.log(error);
-    },
-  );
+  const handleMenuItemClick = (item) => {
+    console.log('Selected Item:', item);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
 
   return (
@@ -72,39 +90,30 @@ export function GeneratePv() {
                     <p>Change Level</p>
                   </MenuHandler>
                   <MenuList className="max-h-60 overflow-y-auto bg-green-100">
-                    <MenuItem>1A</MenuItem>
-                    <MenuItem>1I</MenuItem>
-                    <MenuItem>2A</MenuItem>
-                    <MenuItem>2P</MenuItem>
-                    <MenuItem>3A</MenuItem>
-                    <MenuItem>3B</MenuItem>
-                    <MenuItem>3AI</MenuItem>
-                    <MenuItem>4SAE</MenuItem>
-                    <MenuItem>4NIDS</MenuItem>
-                    <MenuItem>5SAE</MenuItem>
-                    <MenuItem>5NIDS</MenuItem>
+                    {levelsData.map(
+                      ({ name }, key) => {
+                        return (
+                          <MenuItem onClick={() => handleMenuItemClick({name})}>{name}</MenuItem>
+                        );
+                      },
+                    )}
                   </MenuList>
                 </Menu>
               </MenuItem>
-              <MenuItem >
+              <MenuItem>
                 <Menu placement="left-start">
                   <MenuHandler>
                     <p>Change Class</p>
                   </MenuHandler>
-                    <MenuList className="max-h-60 overflow-y-auto bg-green-100">
-                      <MenuItem>Generate PVs</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                      <MenuItem>Change Class</MenuItem>
-                    </MenuList>
+                  <MenuList className="max-h-60 overflow-y-auto bg-green-100" >
+                    {gradesData.map(
+                      ({ name }, key) => {
+                        return (
+                          <MenuItem onClick={() => handleMenuItemClick({name})}>{name}</MenuItem>
+                        );
+                      },
+                    )}
+                  </MenuList>
                 </Menu>
               </MenuItem>
             </MenuList>
@@ -117,7 +126,7 @@ export function GeneratePv() {
               {["Student", "Identifier", "Financial Status", "Score", ""].map((el) => (
                 <th
                   key={el}
-                  className="border-b border-blue-gray-50 py-3 px-5 text-left"
+                  className="border-b border-blue-gray-50 py-3 px-5 text-left "
                 >
                   <Typography
                     variant="small"
@@ -131,7 +140,7 @@ export function GeneratePv() {
             </thead>
             <tbody>
             {authorsTableData.map(
-              ({ img, name, email, job, online, date }, key) => {
+              ({ img, name, email, identifier, online, score }, key) => {
                 const className = `py-3 px-5 ${
                   key === authorsTableData.length - 1
                     ? ""
@@ -158,11 +167,8 @@ export function GeneratePv() {
                       </div>
                     </td>
                     <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {job[0]}
-                      </Typography>
-                      <Typography className="text-xs font-normal text-blue-gray-500">
-                        {job[1]}
+                      <Typography className="text-xs font-semibold text-blue-gray-600 ">
+                        {identifier}
                       </Typography>
                     </td>
                     <td className={className}>
@@ -175,7 +181,7 @@ export function GeneratePv() {
                     </td>
                     <td className={className}>
                       <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {date}
+                        {score}
                       </Typography>
                     </td>
                     <td className={className}>
@@ -197,6 +203,7 @@ export function GeneratePv() {
       </Card>
     </div>
   );
+
 }
 
 export default GeneratePv;

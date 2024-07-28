@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/generate-pv")
+@RequestMapping("/api/pv/generate-pv")
 @RequiredArgsConstructor
 public class GeneratePvController {
 
@@ -22,5 +22,6 @@ public class GeneratePvController {
     ){
         return ResponseEntity.ok(generatePvService.retrieveStudents(request,headerValue));
     }
+
 
 }

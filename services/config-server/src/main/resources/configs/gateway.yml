@@ -20,5 +20,5 @@ spring:
         - id: pv
           uri: lb:http://PV
           predicates:
-            - Path=/api/generate-pv/**
+            - Path=/api/pv/**
 
