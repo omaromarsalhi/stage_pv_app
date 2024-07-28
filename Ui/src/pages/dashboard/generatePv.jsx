@@ -7,9 +7,15 @@ import {
   Chip, MenuHandler, IconButton, MenuList, MenuItem, Menu,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline/index.js";
-import React, { useContext, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { request } from "@/helpers/axios_helper.js";
-import { gradesData, levelsData, setUpGeneratePvPage } from "@/loaders/laodStudents.js";
+import {
+  gradesData,
+  handleGradeOnClick,
+  handleLevelOnClick,
+  levelsData,
+  setUpGeneratePvPage,
+} from "@/loaders/laodStudents.js";
 
 
 export function GeneratePv() {
@@ -49,9 +55,7 @@ export function GeneratePv() {
   }, []);
 
 
-  const handleMenuItemClick = (item) => {
-    console.log('Selected Item:', item);
-  };
+
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -93,7 +97,7 @@ export function GeneratePv() {
                     {levelsData.map(
                       ({ name }, key) => {
                         return (
-                          <MenuItem onClick={() => handleMenuItemClick({name})}>{name}</MenuItem>
+                          <MenuItem onClick={() => handleLevelOnClick({name})}>{name}</MenuItem>
                         );
                       },
                     )}
@@ -109,7 +113,7 @@ export function GeneratePv() {
                     {gradesData.map(
                       ({ name }, key) => {
                         return (
-                          <MenuItem onClick={() => handleMenuItemClick({name})}>{name}</MenuItem>
+                          <MenuItem onClick={() => handleGradeOnClick({name})}>{name}</MenuItem>
                         );
                       },
                     )}

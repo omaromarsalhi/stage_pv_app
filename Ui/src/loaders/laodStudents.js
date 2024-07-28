@@ -56,3 +56,11 @@ async function loadStudents(level, grade) {
     },
   );
 }
+
+export const handleLevelOnClick = (item) => {
+  console.log('Selected Item:', item);
+};
+
+export const handleGradeOnClick = (item) => {
+  console.log('Selected Item:', item);
+};
