@@ -6,6 +6,8 @@ import io.jsonwebtoken.ExpiredJwtException;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -27,15 +29,24 @@ public class JwtAuthenticationFilter implements WebFilter {
     private JwtService jwtService;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
-    private final List<String> excludedPaths = List.of("/api/auth/**");
+    private final List<String> excludedPaths = List.of("/api/auth/**","/api/users/**");
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         try {
             String path = exchange.getRequest().getURI().getPath();
+
+            if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
+                System.out.println("bnena ");
+                return handleCorsPreflight(exchange);
+            }
+
             if (isExcluded(path)) {
                 return chain.filter(exchange);
             }
+
+
+
 
             String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
 
@@ -64,5 +75,15 @@ public class JwtAuthenticationFilter implements WebFilter {
             return bearerToken.substring(7);
         } else
             throw new TokenMissingException("missing token");
+    }
+
+
+    private Mono<Void> handleCorsPreflight(ServerWebExchange exchange) {
+        exchange.getResponse().getHeaders().add(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, "http://localhost:3000");
+        exchange.getResponse().getHeaders().add(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "GET, POST, PUT, DELETE, OPTIONS");
+        exchange.getResponse().getHeaders().add(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "Authorization, Content-Type, Accept");
+        exchange.getResponse().getHeaders().add(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+        exchange.getResponse().setStatusCode(HttpStatus.OK);
+        return exchange.getResponse().setComplete();
     }
 }

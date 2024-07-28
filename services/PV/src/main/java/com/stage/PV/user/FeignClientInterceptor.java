@@ -1,9 +1,8 @@
-package com.stage.PV.authentication;
+package com.stage.PV.user;
 
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 @Component

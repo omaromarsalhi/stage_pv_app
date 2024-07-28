@@ -1,4 +1,4 @@
-package com.stage.PV.authentication;
+package com.stage.PV.user;
 
 public record UserResponse(
         int idUser,

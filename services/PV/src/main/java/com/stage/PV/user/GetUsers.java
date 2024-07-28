@@ -1,4 +1,4 @@
-package com.stage.PV.authentication;
+package com.stage.PV.user;
 
 
 import org.springframework.cloud.openfeign.FeignClient;

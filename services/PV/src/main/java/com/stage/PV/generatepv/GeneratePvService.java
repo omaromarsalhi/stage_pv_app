@@ -1,9 +1,9 @@
 package com.stage.PV.generatepv;
 
 
-import com.stage.PV.authentication.GetUsers;
-import com.stage.PV.authentication.JwtTokenContextHolder;
-import com.stage.PV.authentication.UserResponse;
+import com.stage.PV.user.GetUsers;
+import com.stage.PV.user.JwtTokenContextHolder;
+import com.stage.PV.user.UserResponse;
 import com.stage.PV.grade.GradeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/api/generate-pv")
@@ -17,7 +16,7 @@ public class GeneratePvController {
 
 
     @PostMapping("/getStudents")
-    public ResponseEntity<?> authenticate(
+    public ResponseEntity<?> retrieveStudents(
             @RequestBody StudentsRequest request,
             @RequestHeader("Authorization") String headerValue
     ){

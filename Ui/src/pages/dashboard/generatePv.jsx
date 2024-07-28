@@ -16,7 +16,7 @@ export function GeneratePv() {
 
   request(
     "POST",
-    "auth/login",
+    "/generate-pv/getStudents",
     {
       level: 1,
       grade: "1A1",
@@ -35,6 +35,7 @@ export function GeneratePv() {
 
     }).catch(
     (error) => {
+      console.log(error);
     },
   );
 
@@ -51,7 +52,7 @@ export function GeneratePv() {
           className="m-0 flex items-center justify-between p-6"
         >
           <Typography variant="h6" color="white">
-            3A / 3A4 / 2024-2025
+            1A / 1A1 / 2024-2025
           </Typography>
           <Menu placement="left-start">
             <MenuHandler>

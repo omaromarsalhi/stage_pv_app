@@ -40,7 +40,7 @@ export function SignIn() {
     e.preventDefault();
     request(
       "POST",
-      "auth/login",
+      "/auth/login",
       {
         email: formData.email,
         password: formData.password,
