@@ -7,59 +7,56 @@ import {
   Chip, MenuHandler, IconButton, MenuList, MenuItem, Menu,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline/index.js";
-import React, {  useEffect, useState } from "react";
-import { request } from "@/helpers/axios_helper.js";
+import React, { useEffect, useState } from "react";
 import {
-  gradesData,
   handleGradeOnClick,
-  handleLevelOnClick,
-  levelsData,
-  setUpGeneratePvPage,
+  loadStudents, loadPEs, loadGrades,
 } from "@/loaders/laodStudents.js";
+import { getAuthToken } from "@/helpers/axios_helper.js";
 
 
 export function GeneratePv() {
   const [authorsTableData, setAuthorsTableData] = useState([]);
+  const [levelsData, setLevelsData] = useState();
+  const [gradesData, setGradesData] = useState();
+  const [level, setLevel] = useState("1A");
+  const [grade, setGrade] = useState("1A1");
   const [isLoading, setIsLoading] = useState(true);
 
-  setUpGeneratePvPage(1,"1A1")
-
+  loadPEs().then(data => setLevelsData(data));
 
   useEffect(() => {
-    request(
-      "POST",
-      "/pv/generate-pv/getStudents",
-      {
-        level: 1,
-        grade: "1A1",
-      }).then(
-      (response) => {
-        setIsLoading(false);
-        const formattedData = response.data.map(student => ({
-          img: "/img/team-2.jpeg",
-          name: student.firstName + " " + student.lastName,
-          email: student.email,
-          identifier: student.identifier,
-          online: true,
-          score: "-",
-        }));
 
-        setAuthorsTableData(formattedData);
+    loadGrades(level).then(data => {
+      setGrade((data.length <= 0) ? null : data[0].name);
+      setGradesData(data);
+    });
 
-      }).catch(
-      (error) => {
-        console.log(error);
-      },
-    );
+  }, [level]);
 
-  }, []);
+  useEffect(() => {
+    if (grade !== null) {
+      loadStudents(grade).then(students => {
+          setAuthorsTableData(students);
+          setIsLoading(false);
+        },
+      );
+    } else
+      setAuthorsTableData([]);
 
-
-
+  }, [grade]);
 
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  const handleLevelOnClick = (item) => {
+    setLevel(item.name);
+  };
+
+  const handleGradeOnClick = (item) => {
+    setGrade(item.name);
+  };
 
 
   return (
@@ -68,13 +65,12 @@ export function GeneratePv() {
         <CardHeader
           variant="gradient"
           color="gray"
-          // className="mb-8 p-6"
           floated={false}
           shadow={false}
           className="m-0 flex items-center justify-between p-6"
         >
           <Typography variant="h6" color="white">
-            1A / 1A1 / 2024-2025
+            {level} / {grade ? grade : "none"} / 2024-2025
           </Typography>
           <Menu placement="left-start">
             <MenuHandler>
@@ -97,7 +93,7 @@ export function GeneratePv() {
                     {levelsData.map(
                       ({ name }, key) => {
                         return (
-                          <MenuItem onClick={() => handleLevelOnClick({name})}>{name}</MenuItem>
+                          <MenuItem onClick={() => handleLevelOnClick({ name })}>{name}</MenuItem>
                         );
                       },
                     )}
@@ -109,11 +105,11 @@ export function GeneratePv() {
                   <MenuHandler>
                     <p>Change Class</p>
                   </MenuHandler>
-                  <MenuList className="max-h-60 overflow-y-auto bg-green-100" >
+                  <MenuList className="max-h-60 overflow-y-auto bg-green-100">
                     {gradesData.map(
                       ({ name }, key) => {
                         return (
-                          <MenuItem onClick={() => handleGradeOnClick({name})}>{name}</MenuItem>
+                          <MenuItem onClick={() => handleGradeOnClick({ name })}>{name}</MenuItem>
                         );
                       },
                     )}

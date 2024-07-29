@@ -3,9 +3,7 @@ package com.stage.PV.grade;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,9 +14,11 @@ public class GradeController {
 
     private final GradeService gradeService;
 
-    @PostMapping
-    public ResponseEntity<List<Grade>> getAllGrades() {
-        return ResponseEntity.ok(gradeService.getAllGrades());
+    @PostMapping("/{level}")
+    public ResponseEntity<List<Grade>> getAllGrades(
+            @PathVariable("level") String level
+    ) {
+        return ResponseEntity.ok(gradeService.getAllGrades(level));
     }
 
 }

@@ -22,6 +22,7 @@ public class GeneratePvService {
 
         JwtTokenContextHolder.setToken(token.substring(7));
 
+        System.out.println("grade: "+request.grade());
         var grade=gradeRepository.findByName(request.grade()).orElseThrow(
                 () -> new IllegalArgumentException("Invalid grade")
         );

@@ -13,8 +13,9 @@ public class GradeService {
 
     private GradeRepository gradeRepository;
 
-    public List<Grade> getAllGrades() {
-        return gradeRepository.findAll()
+    public List<Grade> getAllGrades(String level) {
+        String levelName = level + "%";
+        return gradeRepository.findByLevel(levelName)
                 .stream()
                 .sorted(Comparator.comparing(Grade::getIdGrade))
                 .toList();
