@@ -2,7 +2,7 @@ package com.stage.calcul_Module.calculmodules;
 
 import jakarta.validation.constraints.NotNull;
 
-public record ModuleMarksRequest(
+public record CalculModulesRequest(
         @NotNull
         int idmodule,
         @NotNull

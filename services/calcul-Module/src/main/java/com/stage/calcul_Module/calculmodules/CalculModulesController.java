@@ -13,11 +13,7 @@ public class CalculModulesController {
     private final CalculModulesService calculModulesService;
     @PostMapping("/calcul")
     public ResponseEntity<Map<Integer, Float>> averages(
-            @RequestBody ModuleMarksRequest request
+            @RequestBody CalculModulesRequest request
     ){
         return ResponseEntity.ok(calculModulesService.calculateModuleAverage(request));}
-    @PostMapping("/test")
-    public ResponseEntity<String> averages(
-    ){
-        return ResponseEntity.ok("asslamaa");}
 }

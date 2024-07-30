@@ -16,7 +16,7 @@ public class CalculModulesService {
     private final MarkRepository marksRepository;
     private final StudentMarkRepository studentMarkRepository;
 
-    public Map<Integer, Float> calculateModuleAverage(ModuleMarksRequest request) {
+    public Map<Integer, Float> calculateModuleAverage(CalculModulesRequest request) {
 
         int moduleId = request.idmodule();
         int studentId = request.idstudent();
