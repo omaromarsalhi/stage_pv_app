@@ -21,7 +21,7 @@ export const setRefreshHeader = (token) => {
     }
 };
 
-axios.defaults.baseURL = 'http://localhost:8080/api/';
+axios.defaults.baseURL = 'http://localhost:8086/api/';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const request = (method, url, data) => {
