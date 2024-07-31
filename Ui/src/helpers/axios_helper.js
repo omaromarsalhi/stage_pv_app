@@ -5,6 +5,10 @@ export const getAuthToken = () => {
     return window.localStorage.getItem('auth_token');
 };
 
+export const getRefreshToken = () => {
+    return window.localStorage.getItem('refresh_token');
+};
+
 export const setAuthHeader = (token) => {
     if (token !== null) {
       window.localStorage.setItem("auth_token", token);

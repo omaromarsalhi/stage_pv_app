@@ -1,4 +1,5 @@
 import { request } from "@/helpers/axios_helper.js";
+import { checkThenRefreshToken, getOut } from "@/helpers/refresh_token.js";
 
 
 export async function loadPEs() {
@@ -10,23 +11,40 @@ export async function loadPEs() {
       return response.data;
     }).catch(
     (error) => {
-      console.log(error);
+      if (error.response.status === 401) {
+        checkThenRefreshToken();
+        throw error;
+      } else
+        getOut();
     },
   );
 }
 
-export async function loadGrades(level) {
+ export async function loadGrades(level)  {
+  try {
+    return loadGradesLocally("1A").then(data => {
+      return data;
+    });
+  } catch (error) {
+    console.log("omar");
+    console.log(error);
+    if (error.response.status === 401) {
+      console.log("omar 401");
+
+      // checkThenRefreshToken().then(() => loadGrades(level));
+    } else
+      getOut();
+  }
+}
+
+async function loadGradesLocally(level) {
   return await request(
     "POST",
     "/pv/grades/" + level,
   ).then(
     (response) => {
       return response.data;
-    }).catch(
-    (error) => {
-      console.log(error);
-    },
-  );
+    });
 }
 
 
@@ -48,53 +66,28 @@ export async function loadStudents(grade) {
       }));
     }).catch(
     (error) => {
-      console.log(error);
+      if (error.response.status === 401) {
+        checkThenRefreshToken().then(() => loadStudents(grade));
+      } else
+        getOut();
     },
   );
 }
 
-export const onLevelClicked = (item) => {
-  return loadGrades(item.name).then(data => {
-    console.log("Grades data:", data);
-    return data;
-  }).catch(error => {
-    console.error("Error loading grades:", error);
-  });
-};
 
-export const handleGradeOnClick = (item) => {
-  console.log("Selected Item:", item);
-};
-
-
-
-// useEffect(() => {
-//   setUpGeneratePvPage(1,"1A1")
-//
-//   request(
+// async function loadGradesLocally(level) {
+//   return await request(
 //     "POST",
-//     "/pv/generate-pv/getStudents",
-//     {
-//       level: 1,
-//       grade: "1A1",
-//     }).then(
+//     "/pv/grades/" + level,
+//   ).then(
 //     (response) => {
-//       setIsLoading(false);
-//       const formattedData = response.data.map(student => ({
-//         img: "/img/team-2.jpeg",
-//         name: student.firstName + " " + student.lastName,
-//         email: student.email,
-//         identifier: student.identifier,
-//         online: true,
-//         score: "-",
-//       }));
-//
-//       setAuthorsTableData(formattedData);
-//
+//       return response.data;
 //     }).catch(
 //     (error) => {
-//       console.log(error);
+//       if (error.response.status === 401) {
+//         checkThenRefreshToken().then(() => loadGrades(level));
+//       } else
+//         getOut();
 //     },
 //   );
-//
-// }, [authorsTableData]);
+// }

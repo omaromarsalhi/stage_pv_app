@@ -1,8 +1,8 @@
 package com.stage.authentification.auth;
 
 
-import com.stage.authentification.exeption.TokenExpiredException;
-import com.stage.authentification.exeption.UserNotFoundException;
+import com.stage.authentification.exception.TokenExpiredException;
+import com.stage.authentification.exception.UserNotFoundException;
 import com.stage.authentification.jwt.JwtService;
 import com.stage.authentification.token.TokenBlackList;
 import com.stage.authentification.token.TokenBlackListRepository;
@@ -114,7 +114,7 @@ public class AuthenticationService {
 
             return new RefreshResponse(jwtToken, refreshToken);
         } else
-            throw new TokenExpiredException("invalid refresh token");
+            throw new TokenExpiredException("JWT Token has expired");
     }
 
 }

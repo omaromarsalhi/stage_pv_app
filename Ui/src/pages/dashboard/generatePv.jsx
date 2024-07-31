@@ -9,10 +9,10 @@ import {
 import { EllipsisVerticalIcon } from "@heroicons/react/24/outline/index.js";
 import React, { useEffect, useState } from "react";
 import {
-  handleGradeOnClick,
   loadStudents, loadPEs, loadGrades,
 } from "@/loaders/laodStudents.js";
-import { getAuthToken } from "@/helpers/axios_helper.js";
+import { useSelector } from "react-redux";
+import { setUsernameAndToken } from "@/helpers/refresh_token.js";
 
 
 export function GeneratePv() {
@@ -22,20 +22,31 @@ export function GeneratePv() {
   const [level, setLevel] = useState("1A");
   const [grade, setGrade] = useState("1A1");
   const [isLoading, setIsLoading] = useState(true);
+  const [isPanEtudeLoadedYet, setIsPanEtudeLoadedYet] = useState(false);
+  const user = useSelector((state) => state.user);
 
-  loadPEs().then(data => setLevelsData(data));
+  setUsernameAndToken(user.email);
 
   useEffect(() => {
-
-    loadGrades(level).then(data => {
-      setGrade((data.length <= 0) ? null : data[0].name);
-      setGradesData(data);
+    loadPEs().then(data => {
+      console.log(data);
+      setLevelsData(data);
+      setIsPanEtudeLoadedYet(true);
     });
-
-  }, [level]);
+  }, []);
 
   useEffect(() => {
-    if (grade !== null) {
+    if (isPanEtudeLoadedYet) {
+      loadGrades(level).then(data => {
+        console.log(data);
+        setGrade((data.length <= 0) ? null : data[0].name);
+        setGradesData(data);
+      })
+    }
+  }, [level, isPanEtudeLoadedYet]);
+
+  useEffect(() => {
+    if (grade !== null && isPanEtudeLoadedYet) {
       loadStudents(grade).then(students => {
           setAuthorsTableData(students);
           setIsLoading(false);
@@ -43,8 +54,7 @@ export function GeneratePv() {
       );
     } else
       setAuthorsTableData([]);
-
-  }, [grade]);
+  }, [grade,isPanEtudeLoadedYet]);
 
   if (isLoading) {
     return <div>Loading...</div>;

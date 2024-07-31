@@ -19,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.charset.StandardCharsets;
+import java.security.SignatureException;
 import java.util.List;
 
 @Component
@@ -29,7 +30,7 @@ public class JwtAuthenticationFilter implements WebFilter {
     private JwtService jwtService;
 
     private final AntPathMatcher pathMatcher = new AntPathMatcher();
-    private final List<String> excludedPaths = List.of("/api/auth/**","/api/users/**");
+    private final List<String> excludedPaths = List.of("/api/auth/**", "/api/users/**");
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -37,15 +38,12 @@ public class JwtAuthenticationFilter implements WebFilter {
             String path = exchange.getRequest().getURI().getPath();
 
             if (exchange.getRequest().getMethod() == HttpMethod.OPTIONS) {
-                System.out.println("bnena ");
                 return handleCorsPreflight(exchange);
             }
 
             if (isExcluded(path)) {
                 return chain.filter(exchange);
             }
-
-
 
 
             String token = extractToken(exchange.getRequest().getHeaders().getFirst("Authorization"));
@@ -56,9 +54,12 @@ public class JwtAuthenticationFilter implements WebFilter {
 
             return chain.filter(exchange);
         } catch (TokenMissingException | ExpiredJwtException e) {
+            String errorMessage = "{\"token\": \"JWT Token has expired Donkey\"}";
             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
             exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-            String errorMessage = "{\"token\": \"Unauthorized: Invalid or missing token Donkey\"}";
+            exchange.getResponse().getHeaders().set("Access-Control-Allow-Origin", "http://localhost:3000");
+            exchange.getResponse().getHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+            exchange.getResponse().getHeaders().set("Access-Control-Allow-Headers", "authorization, content-type, xsrf-token");
             DataBufferFactory bufferFactory = exchange.getResponse().bufferFactory();
             DataBuffer buffer = bufferFactory.wrap(errorMessage.getBytes(StandardCharsets.UTF_8));
             return exchange.getResponse().writeWith(Flux.just(buffer));
