@@ -1,6 +1,8 @@
 server:
   port: 8888
 spring:
+#  main:
+#    web-application-type: reactive
   cloud:
     gateway:
       discovery:
@@ -11,3 +13,12 @@ spring:
           uri: lb:http://AUTHENTIFICATION
           predicates:
             - Path=/api/auth/**
+        - id: authentification
+          uri: lb:http://AUTHENTIFICATION
+          predicates:
+            - Path=/api/users/**
+        - id: pv
+          uri: lb:http://PV
+          predicates:
+            - Path=/api/pv/**
+

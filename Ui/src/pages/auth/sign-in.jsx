@@ -1,16 +1,18 @@
 import {
   Input,
-  Checkbox,
   Button,
   Typography,
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
-import { func } from "prop-types";
 import { request, setAuthHeader, setRefreshHeader } from "@/helpers/axios_helper.js";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { useDispatch } from "react-redux";
 
 
 export function SignIn() {
+
+  const dispatch = useDispatch();
+
 
   const [formData, setFormData] = useState({
     email: "",
@@ -34,42 +36,38 @@ export function SignIn() {
     }));
   };
 
-  // let onLogin = (e) => {
-  //   e.preventDefault();
-  //   request(
-  //     "POST",
-  //     "auth/login",
-  //     {
-  //       email: formData.email,
-  //       password: formData.password,
-  //     }).then(
-  //     (response) => {
-  //       setAuthHeader(response.data.token);
-  //       setRefreshHeader(response.data.refreshToken);
-  //       navigate('/dashboard/profile')
-  //     }).catch(
-  //     (error) => {
-  //       setAuthHeader(null);
-  //       setErrors(error.response.data);
-  //     },
-  //   );
-  // };
-
-
   let onLogin = (e) => {
     e.preventDefault();
     request(
       "POST",
-      "test/test_test",
-    ).then(
+      "/auth/login",
+      {
+        email: formData.email,
+        password: formData.password,
+      }).then(
       (response) => {
-        console.log(response);
+        setAuthHeader(response.data.token);
+        setRefreshHeader(response.data.refreshToken);
+
+        const userData = {
+          identifier: response.data.identifier,
+          firstname: response.data.firstname,
+          lastname: response.data.lastname,
+          email: response.data.email,
+          role: response.data.role,
+        };
+
+        dispatch({ type: 'SET_USER', payload: userData });
+        navigate("/dashboard/profile");
+
       }).catch(
       (error) => {
-        console.log(error);
+        setAuthHeader(null);
+        setErrors(error.response.data);
       },
     );
   };
+
 
   return (
     <section className="m-8 flex gap-4">

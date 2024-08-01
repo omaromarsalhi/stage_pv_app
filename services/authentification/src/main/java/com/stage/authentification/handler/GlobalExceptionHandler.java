@@ -1,8 +1,7 @@
 package com.stage.authentification.handler;
 
-import com.stage.authentification.exeption.TokenExpiredException;
-import com.stage.authentification.exeption.UserNotFoundException;
-import jakarta.servlet.ServletException;
+import com.stage.authentification.exception.TokenExpiredException;
+import com.stage.authentification.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -44,9 +43,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(TokenExpiredException.class)
     public ResponseEntity<?> handleTokenExpiredException(TokenExpiredException exp) {
-        System.out.println("access token expired");
         Map<String, String> errors = new HashMap<>();
-        errors.put("invalid_token", exp.getMessage());
+        errors.put("token", exp.getMessage());
         return ResponseEntity
                 .status(HttpStatus.UNAUTHORIZED)
                 .body(errors);

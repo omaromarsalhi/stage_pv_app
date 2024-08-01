@@ -1,4 +1,4 @@
-package com.stage.authentification.exeption;
+package com.stage.authentification.exception;
 
 
 
