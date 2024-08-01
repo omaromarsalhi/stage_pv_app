@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/marks")
+@CrossOrigin("*")
 public class MarkController {
 
     @Autowired

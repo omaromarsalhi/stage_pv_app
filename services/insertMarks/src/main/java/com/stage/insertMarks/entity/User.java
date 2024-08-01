@@ -25,8 +25,12 @@ public class User {
     @Column(name = "password")
     private String password;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
-    private String role;
+    private Role role;
+
+    @Column(name = "idGrade", nullable = true)
+    private Long idGrade;
 
     // Getters and setters
     public Integer getIdUser() {
@@ -77,11 +81,19 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Long getIdGrade() {
+        return idGrade;
+    }
+
+    public void setIdGrade(Long idGrade) {
+        this.idGrade = idGrade;
     }
 }
