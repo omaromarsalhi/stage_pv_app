@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,4 +26,9 @@ public class CalculUeController {
         return calculUeService.getModuleIdsByUniteEnseignement(idUE);
     }
 
+    @PostMapping("/send-to-other/{idUE}/{idStudent}")
+    public Map<Integer, Collection<Float>> sendModulesToOtherService(@PathVariable Integer idUE, @PathVariable Integer idStudent) {
+        List<Integer> moduleIds = calculUeService.getModuleIdsByUniteEnseignement(idUE);
+        return calculUeService.sendModuleIdsToOtherService(moduleIds, idStudent);
+    }
 }
