@@ -4,43 +4,36 @@ import { useNavigate } from "react-router-dom";
 
 let username;
 let my_refresh_token;
+let navigate;
 
 export function setUsernameAndToken(data) {
   username = data;
   my_refresh_token = getRefreshToken();
+  navigate = useNavigate();
 }
 
-export async function checkThenRefreshToken() {
-  checkToken().then(refresh => {
-    if (!refresh) {
-      setAuthHeader(null);
-      return refreshToken(username, my_refresh_token);
-    }
-  });
-}
 
-function checkToken() {
-  return request(
+
+export async function checkToken() {
+  return await request(
     "POST",
     "/auth/checkToken/" + username,
   ).then(
     (response) => {
       console.log("response " + response.data);
-      if (response.data === ("Hi " + username + " !"))
-        return true;
-      else
+      if (response.data !== ("Hi " + username + " !"))
         getOut();
     }).catch(
-    (error) => {
-      return false;
+    async (error) => {
+      setAuthHeader(null);
+      await refreshToken();
     },
   );
 }
 
 
-function refreshToken() {
-
-  request(
+async function refreshToken() {
+  await request(
     "POST",
     "/auth/refresh",
     {
@@ -59,7 +52,6 @@ function refreshToken() {
 }
 
 export function getOut() {
-  const navigate = useNavigate();
   window.localStorage.removeItem("auth_token");
   window.localStorage.removeItem("refresh_token");
   navigate("/auth/sign-in");
