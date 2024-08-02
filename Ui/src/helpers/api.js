@@ -13,7 +13,9 @@ export const loadModules = async () => {
 
 export const loadGrades = async (moduleId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/grades?moduleId=${moduleId}`);
+        const response = await axios.get(`${API_BASE_URL}/grades`, {
+            params: { moduleId }
+        });
         return response.data;
     } catch (error) {
         console.error('Error loading grades:', error);
@@ -23,7 +25,9 @@ export const loadGrades = async (moduleId) => {
 
 export const loadStudents = async (gradeId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/students?gradeId=${gradeId}`);
+        const response = await axios.get(`${API_BASE_URL}/students`, {
+            params: { gradeId }
+        });
         return response.data;
     } catch (error) {
         console.error('Error loading students:', error);

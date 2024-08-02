@@ -30,7 +30,7 @@ public class User {
     private Role role;
 
     @Column(name = "idGrade", nullable = true)
-    private Long idGrade;
+    private Integer idGrade;
 
     // Getters and setters
     public Integer getIdUser() {
@@ -89,11 +89,11 @@ public class User {
         this.role = role;
     }
 
-    public Long getIdGrade() {
+    public Integer getIdGrade() {
         return idGrade;
     }
 
-    public void setIdGrade(Long idGrade) {
+    public void setIdGrade(Integer idGrade) {
         this.idGrade = idGrade;
     }
 }

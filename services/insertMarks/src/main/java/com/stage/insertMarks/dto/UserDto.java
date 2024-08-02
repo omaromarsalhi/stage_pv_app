@@ -10,7 +10,7 @@ public record UserDto(
         String firstName,
         String lastName,
         String email,
-        Long idGrade,
+        Integer idGrade,
         String role
 ) {
 }

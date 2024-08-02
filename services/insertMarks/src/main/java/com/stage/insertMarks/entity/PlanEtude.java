@@ -8,7 +8,7 @@ import java.util.Set;
 public class PlanEtude {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idPE;
+    private Integer idPE;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -20,11 +20,11 @@ public class PlanEtude {
     private Set<Grade> grades;
 
     // Getters and Setters
-    public Long getIdPE() {
+    public Integer getIdPE() {
         return idPE;
     }
 
-    public void setIdPE(Long idPE) {
+    public void setIdPE(Integer idPE) {
         this.idPE = idPE;
     }
 

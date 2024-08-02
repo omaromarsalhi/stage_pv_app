@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class Grade {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idGrade;
+    private Integer idGrade;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -17,11 +17,11 @@ public class Grade {
     private PlanEtude planEtude;
 
     // Getters and setters
-    public Long getIdGrade() {
+    public Integer getIdGrade() {
         return idGrade;
     }
 
-    public void setIdGrade(Long idGrade) {
+    public void setIdGrade(Integer idGrade) {
         this.idGrade = idGrade;
     }
 

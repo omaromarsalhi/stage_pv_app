@@ -12,7 +12,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     Optional<User> findByIdentifier(String identifier);
     @Query("""
-            select u from User u where u.idgrade= :idgrade and u.role= :role
+            select u from User u where u.idGrade= :idgrade and u.role= :role
             """)
     List<User> findByRoleAndGrade(Role role, int idgrade);
 }

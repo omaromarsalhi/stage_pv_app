@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS PlanEtude
     idPE  SERIAL PRIMARY KEY,
     name  VARCHAR(255) NOT NULL,
     level VARCHAR(255) NOT NULL
-    );
+);
 
 -- Create the Grade table
 CREATE TABLE IF NOT EXISTS Grade
@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Grade
     name    VARCHAR(255) NOT NULL,
     idPE    INTEGER,
     FOREIGN KEY (idPE) REFERENCES PlanEtude (idPE)
-    );
+);
 
 -- Create the Transcript table
 CREATE TABLE IF NOT EXISTS Transcript
@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Transcript
     idGrade      INTEGER,
     idUser       INTEGER,
     FOREIGN KEY (idGrade) REFERENCES Grade (idGrade)
-    );
+);
 
 -- Create the GradeProfessor table
 CREATE TABLE IF NOT EXISTS GradeProfessor
@@ -34,14 +34,14 @@ CREATE TABLE IF NOT EXISTS GradeProfessor
     idGrade INTEGER,
     PRIMARY KEY (idUser, idGrade),
     FOREIGN KEY (idGrade) REFERENCES Grade (idGrade)
-    );
+);
 
 -- Create the UniteEnseignement table
 CREATE TABLE IF NOT EXISTS UniteEnseignement
 (
     idUE SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL
-    );
+);
 
 -- Create the Module table
 CREATE TABLE IF NOT EXISTS Module
@@ -51,7 +51,7 @@ CREATE TABLE IF NOT EXISTS Module
     coefficient FLOAT        NOT NULL,
     idUE        INTEGER,
     FOREIGN KEY (idUE) REFERENCES UniteEnseignement (idUE)
-    );
+);
 
 -- Create the PlanEtudeUniteEnseignement table
 CREATE TABLE IF NOT EXISTS PlanEtudeUniteEnseignement
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS PlanEtudeUniteEnseignement
     PRIMARY KEY (idPE, idUE),
     FOREIGN KEY (idPE) REFERENCES PlanEtude (idPE),
     FOREIGN KEY (idUE) REFERENCES UniteEnseignement (idUE)
-    );
+);
 
 
 
@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS Mark
     markTp   FLOAT NOT NULL,
     idModule INTEGER,
     FOREIGN KEY (idModule) REFERENCES Module (idModule)
-    );
+);
 
 -- Create the StudentMark table
 CREATE TABLE IF NOT EXISTS StudentMark
@@ -84,8 +84,7 @@ CREATE TABLE IF NOT EXISTS StudentMark
     idMark    INTEGER,
     PRIMARY KEY (idStudent, idMark),
     FOREIGN KEY (idMark) REFERENCES Mark (idMark)
-    );
-
+);
 create table if not exists users
 (
     idUser     integer primary key,
@@ -94,5 +93,6 @@ create table if not exists users
     lastname   varchar,
     email      varchar,
     password   varchar,
-    role       varchar
-    );
+    role       varchar,
+    idGrade    integer
+);
