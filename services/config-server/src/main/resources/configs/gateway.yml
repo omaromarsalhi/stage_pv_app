@@ -1,8 +1,8 @@
 server:
   port: 8888
 spring:
-#  main:
-#    web-application-type: reactive
+  #  main:
+  #    web-application-type: reactive
   cloud:
     gateway:
       discovery:
@@ -21,4 +21,11 @@ spring:
           uri: lb:http://PV
           predicates:
             - Path=/api/pv/**
-
+        - id: calcul-Module
+          uri: lb:http://CALCUL-MODULE
+          predicates:
+            - Path=/api/module/**
+        - id: calcul-UE
+          uri: lb:http://CALCUL-UE
+          predicates:
+            - Path=/api/ue/**
