@@ -185,7 +185,7 @@ export function GeneratePv() {
                       <Chip
                         variant="gradient"
                         color={online ? "green" : "blue-gray"}
-                        value={online ? "online" : "offline"}
+                        value={online ? "payee" : "Non payee"}
                         className="py-0.5 px-2 text-[11px] font-medium w-fit"
                       />
                     </td>

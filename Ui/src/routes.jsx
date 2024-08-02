@@ -4,10 +4,11 @@ import {
   TableCellsIcon,
   InformationCircleIcon,
   ServerStackIcon,
-  RectangleStackIcon,
+  RectangleStackIcon
 } from "@heroicons/react/24/solid";
 import { Home, Profile, Tables, Notifications, GeneratePv, Test } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
+import { RiAiGenerate } from "react-icons/ri";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -24,7 +25,7 @@ export const routes = [
         element: <Profile />,
       },
       {
-        icon: <UserCircleIcon {...icon} />,
+        icon: <RiAiGenerate {...icon} />,
         name: "generatePv",
         path: "/generatePv",
         element: <GeneratePv />,
