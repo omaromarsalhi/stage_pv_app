@@ -11,6 +11,8 @@ import java.util.Map;
 @RequestMapping("/api/module")
 public class CalculModulesController {
     private final CalculModulesService calculModulesService;
+
+
     @PostMapping("/calcul")
     public ResponseEntity<Map<Integer, Float>> averages(
             @RequestBody CalculModulesRequest request

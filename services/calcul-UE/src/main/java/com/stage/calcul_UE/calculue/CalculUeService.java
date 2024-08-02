@@ -30,9 +30,10 @@ public class CalculUeService {
 
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "Bearer "+token);
+        System.out.println("token from service CALCULE UE: " + token);
+        headers.set("Authorization", token);
 
-        HttpEntity<String> entity = new HttpEntity<>(headers);
+//        HttpEntity<String> entity = new HttpEntity<>(headers);
 
         String url = "http://localhost:8888/api/module/calcul";
 
@@ -48,6 +49,7 @@ public class CalculUeService {
 //                    request,
 //                    Map.class,
 //            );
+            HttpEntity<Map<String, Integer>> entity = new HttpEntity<>(request, headers);
             ResponseEntity<Map<Integer, Float>> response = restTemplate.exchange(
                     url,
                     HttpMethod.POST,
