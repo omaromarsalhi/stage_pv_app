@@ -1,7 +1,8 @@
 package com.stage.calcul_UE.calculue;
 
-import com.stage.calcul_UE.uniteenseignement.Module;
-import com.stage.calcul_UE.uniteenseignement.ModuleRepository;
+import com.stage.calcul_UE.module.Module;
+import com.stage.calcul_UE.module.ModuleRepository;
+import com.stage.calcul_UE.planetude.PlanEtudeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -10,59 +11,80 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CalculUeService {
+
     private final ModuleRepository modulesRepository;
     private final RestTemplate restTemplate;
+    private final PlanEtudeRepository planEtudeRepository;
+    private final String URL = "http://localhost:8888/api/module/calcul";
 
-    public Map<Integer, Collection<Float>> sendModuleIdsToOtherService(Integer idUE, Integer idStudent,String token) {
-        List<Module> modules = modulesRepository.findByIdUE(idUE);
-        List<Integer> moduleIds = modules.stream()
-                .map(Module::getIdModule)
-                .collect(Collectors.toList());
+    public List<ResponseUe> calculate(int idPe, int idStudent, String headerValue) {
+        var planEtude = planEtudeRepository.findPlanEtudeByIdPe(idPe);
 
+        List<ResponseUe> list = new ArrayList<>();
+
+        for (Module unity : planEtude.getUnites()) {
+            list.add(sendModuleIdsToOtherService(unity.getIdUE(), idStudent, headerValue));
+        }
+        return list;
+    }
+
+
+
+
+    public ResponseUe sendModuleIdsToOtherService(Integer idUE, Integer idStudent, String token) {
+
+        List<Integer> moduleIds = modulesRepository.getIdsByIdUE(idUE);
+        List<Float> moduleCoefficients = modulesRepository.getCoefficientsByIdUE(idUE);
 
         HttpHeaders headers = new HttpHeaders();
-        System.out.println("token from service CALCULE UE: " + token);
         headers.set("Authorization", token);
 
-//        HttpEntity<String> entity = new HttpEntity<>(headers);
+        List<Map<String, Object>> list = new ArrayList<>();
 
-        String url = "http://localhost:8888/api/module/calcul";
-
-        Map<Integer, Collection<Float>> moduleAverages = new HashMap<>();
+        Map<String, Integer> request = new HashMap<>();
 
         for (Integer idModule : moduleIds) {
-            Map<String, Integer> request = new HashMap<>();
             request.put("idmodule", idModule);
             request.put("idstudent", idStudent);
 
-//            Map<Integer, Float> response = restTemplate.postForObject(
-//                    url,
-//                    request,
-//                    Map.class,
-//            );
-            HttpEntity<Map<String, Integer>> entity = new HttpEntity<>(request, headers);
-            ResponseEntity<Map<Integer, Float>> response = restTemplate.exchange(
-                    url,
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                    URL,
                     HttpMethod.POST,
-                    entity,
-                    (Class<Map<Integer, Float>>) (Class<?>) Map.class
+                    new HttpEntity<>(request, headers),
+                    (Class<Map<String, Object>>) (Class<?>) Map.class
             );
-//            Collection<Float> average = response.values();
-//            moduleAverages.put(idModule, average);
-            Collection<Float> average = response.getBody().values();
-            moduleAverages.put(idModule, average);
+
+            Map<String, Object> average = response.getBody();
+
+            list.add(average);
+            request.clear();
         }
 
-        return moduleAverages;
+        var average=calculateAverage(list,moduleIds,moduleCoefficients);
+
+        return ResponseUe
+                .builder()
+                .idUE(idUE)
+                .scores(list)
+                .average(average)
+                .build();
+    }
+
+
+    private float calculateAverage(List<Map<String, Object>> list,List<Integer> moduleIds,List<Float> moduleCoefficients) {
+        float sum = 0;
+        float coefficients = 0;
+        for (int i = 0; i < list.size(); i++) {
+            sum+=(Double) list.get(i).get(Integer.toString(moduleIds.get(i))) * moduleCoefficients.get(i);
+            coefficients+=moduleCoefficients.get(i);
+        }
+        return sum/coefficients;
     }
 
 }

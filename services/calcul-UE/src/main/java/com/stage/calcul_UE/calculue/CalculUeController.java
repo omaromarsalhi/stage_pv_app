@@ -17,10 +17,15 @@ public class CalculUeController {
     private final CalculUeService calculUeService;
 
     @PostMapping("/send-to-other")
-    public Map<Integer, Collection<Float>> sendModulesToOtherService(
+    public ResponseEntity<List<ResponseUe>> sendModulesToOtherService(
             @RequestBody CalculUeRequest request,
             @RequestHeader("Authorization") String headerValue
-            ) {
-        return calculUeService.sendModuleIdsToOtherService(request.idUE(), request.idstudent(),headerValue);
+    ) {
+        return ResponseEntity.ok(
+                calculUeService.calculate(
+                        request.idPE(),
+                        request.idStudent(),
+                        headerValue)
+        );
     }
 }

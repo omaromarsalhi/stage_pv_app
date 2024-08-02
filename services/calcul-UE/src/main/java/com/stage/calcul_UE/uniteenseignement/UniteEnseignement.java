@@ -1,27 +1,27 @@
 package com.stage.calcul_UE.uniteenseignement;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UniteEnseignement {
     @Id
     private int idUE;
     private String name;
 
-    public int getIdUE() {
-        return idUE;
-    }
 
-    public void setIdUE(int idUE) {
-        this.idUE = idUE;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
+//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinTable(
+//            name = "planetudeuniteenseignement",
+//            joinColumns = @JoinColumn(name = "student_id"),
+//            inverseJoinColumns = @JoinColumn(name = "course_id")
+//    )
+//    private List<Course> courses = new ArrayList<>();
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -16,7 +17,7 @@ public class CalculModulesService {
     private final MarkRepository marksRepository;
     private final StudentMarkRepository studentMarkRepository;
 
-    public Map<Integer, Float> calculateModuleAverage(CalculModulesRequest request) {
+    public Map<String, Object> calculateModuleAverage(CalculModulesRequest request) {
 
         int moduleId = request.idmodule();
         int studentId = request.idstudent();
@@ -46,8 +47,8 @@ public class CalculModulesService {
                 .average()
                 .orElse(0.0);
 
-        Map<Integer, Float> result = new HashMap<>();
-        result.put(moduleId, (float) average);
+        Map<String, Object> result = new HashMap<>();
+        result.put(Integer.toString(moduleId), average);
 
         return result;
     }

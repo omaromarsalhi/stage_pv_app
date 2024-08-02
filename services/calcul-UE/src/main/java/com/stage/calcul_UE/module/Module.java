@@ -1,4 +1,4 @@
-package com.stage.calcul_UE.uniteenseignement;
+package com.stage.calcul_UE.module;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

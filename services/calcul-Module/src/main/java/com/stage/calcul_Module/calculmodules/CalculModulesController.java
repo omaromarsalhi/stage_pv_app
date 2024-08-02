@@ -14,7 +14,7 @@ public class CalculModulesController {
 
 
     @PostMapping("/calcul")
-    public ResponseEntity<Map<Integer, Float>> averages(
+    public ResponseEntity<Map<String, Object>> averages(
             @RequestBody CalculModulesRequest request
     ){
         return ResponseEntity.ok(calculModulesService.calculateModuleAverage(request));}
