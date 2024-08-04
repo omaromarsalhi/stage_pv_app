@@ -13,6 +13,8 @@ import {
 } from "@/loaders/laodStudents.js";
 import { useSelector } from "react-redux";
 import { setUsernameAndToken } from "@/helpers/refresh_token.js";
+import { CiFaceMeh  } from "react-icons/ci";
+import Popup  from "@/widgets/layout/popup.jsx";
 
 
 export function GeneratePv() {
@@ -24,6 +26,9 @@ export function GeneratePv() {
   const [isLoading, setIsLoading] = useState(true);
   const [isPanEtudeLoadedYet, setIsPanEtudeLoadedYet] = useState(false);
   const user = useSelector((state) => state.user);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+
+
 
   setUsernameAndToken(user.email);
 
@@ -66,6 +71,10 @@ export function GeneratePv() {
 
   const handleGradeOnClick = (item) => {
     setGrade(item.name);
+  };
+
+  const togglePopup = () => {
+    setPopupVisible(!isPopupVisible);
   };
 
 
@@ -184,8 +193,8 @@ export function GeneratePv() {
                     <td className={className}>
                       <Chip
                         variant="gradient"
-                        color={online ? "green" : "blue-gray"}
-                        value={online ? "online" : "offline"}
+                        color={online ? "green" : "red"}
+                        value={online ? "payee" : "non payee"}
                         className="py-0.5 px-2 text-[11px] font-medium w-fit"
                       />
                     </td>
@@ -198,9 +207,10 @@ export function GeneratePv() {
                       <Typography
                         as="a"
                         href="#"
-                        className="text-xs font-semibold text-blue-gray-600"
+                        className="text-[30px] text-blue-gray-600"
+                        onClick={togglePopup}
                       >
-                        GeneratePv
+                        <CiFaceMeh   />
                       </Typography>
                     </td>
                   </tr>
@@ -210,6 +220,7 @@ export function GeneratePv() {
             </tbody>
           </table>
         </CardBody>
+        <Popup show={isPopupVisible} onClose={togglePopup} />
       </Card>
     </div>
   );
