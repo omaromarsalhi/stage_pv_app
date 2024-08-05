@@ -3,6 +3,7 @@ package com.stage.calcul_UE.calculue;
 import com.stage.calcul_UE.module.Module;
 import com.stage.calcul_UE.module.ModuleRepository;
 import com.stage.calcul_UE.planetude.PlanEtudeRepository;
+import com.stage.calcul_UE.uniteenseignement.UniteEnseignement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,20 +25,24 @@ public class CalculUeService {
     private final String URL = "http://localhost:8888/api/module/calcul";
 
     public List<ResponseUe> calculate(int idPe, int idStudent, String headerValue) {
-        var planEtude = planEtudeRepository.findPlanEtudeByIdPe(idPe);
+        var units = planEtudeRepository
+                .findPlanEtudeByIdPe(idPe)
+                .getUnites()
+                .stream()
+                .sorted(Comparator.comparing(UniteEnseignement::getIdUE))
+                .toList();
 
         List<ResponseUe> list = new ArrayList<>();
 
-        for (Module unity : planEtude.getUnites()) {
-            list.add(sendModuleIdsToOtherService(unity.getIdUE(), idStudent, headerValue));
+        for (UniteEnseignement unit : units) {
+            list.add(sendModuleIdsToOtherService(unit.getIdUE(), idStudent, headerValue));
         }
         return list;
     }
 
 
+    public ResponseUe sendModuleIdsToOtherService(int idUE, Integer idStudent, String token) {
 
-
-    public ResponseUe sendModuleIdsToOtherService(Integer idUE, Integer idStudent, String token) {
 
         List<Integer> moduleIds = modulesRepository.getIdsByIdUE(idUE);
         List<Float> moduleCoefficients = modulesRepository.getCoefficientsByIdUE(idUE);
@@ -66,7 +71,7 @@ public class CalculUeService {
             request.clear();
         }
 
-        var average=calculateAverage(list,moduleIds,moduleCoefficients);
+        var average = calculateAverage(list, moduleIds, moduleCoefficients);
 
         return ResponseUe
                 .builder()
@@ -77,14 +82,14 @@ public class CalculUeService {
     }
 
 
-    private float calculateAverage(List<Map<String, Object>> list,List<Integer> moduleIds,List<Float> moduleCoefficients) {
+    private float calculateAverage(List<Map<String, Object>> list, List<Integer> moduleIds, List<Float> moduleCoefficients) {
         float sum = 0;
         float coefficients = 0;
         for (int i = 0; i < list.size(); i++) {
-            sum+=(Double) list.get(i).get(Integer.toString(moduleIds.get(i))) * moduleCoefficients.get(i);
-            coefficients+=moduleCoefficients.get(i);
+            sum += (Double) list.get(i).get(Integer.toString(moduleIds.get(i))) * moduleCoefficients.get(i);
+            coefficients += moduleCoefficients.get(i);
         }
-        return sum/coefficients;
+        return sum / coefficients;
     }
 
 }

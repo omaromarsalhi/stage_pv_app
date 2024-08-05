@@ -8,12 +8,12 @@ import java.util.List;
 public interface ModuleRepository extends JpaRepository<Module,Integer> {
 
     @Query("""
-            select distinct m.idModule from Module m where m.idUE= :idUE
+            select m.idModule from Module m where m.idUE= :idUE order by m.idModule
             """)
     List<Integer> getIdsByIdUE(Integer idUE);
 
     @Query("""
-            select distinct m.coefficient from Module m where m.idUE= :idUE
+            select m.coefficient from Module m where m.idUE= :idUE order by m.idModule
             """)
     List<Float> getCoefficientsByIdUE(Integer idUE);
 }

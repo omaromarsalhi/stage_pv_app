@@ -2,6 +2,7 @@ package com.stage.calcul_UE.planetude;
 
 
 import com.stage.calcul_UE.module.Module;
+import com.stage.calcul_UE.uniteenseignement.UniteEnseignement;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -34,5 +35,5 @@ public class PlanEtude {
             joinColumns = @JoinColumn(name = "idPe"),
             inverseJoinColumns = @JoinColumn(name = "idUe")
     )
-    private Set<Module> unites = new HashSet<>();
+    private Set<UniteEnseignement> unites = new HashSet<>();
 }

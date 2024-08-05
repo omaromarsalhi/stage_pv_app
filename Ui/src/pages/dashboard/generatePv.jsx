@@ -13,8 +13,8 @@ import {
 } from "@/loaders/laodStudents.js";
 import { useSelector } from "react-redux";
 import { setUsernameAndToken } from "@/helpers/refresh_token.js";
-import { CiFaceMeh  } from "react-icons/ci";
-import Popup  from "@/widgets/layout/popup.jsx";
+import { CiFaceMeh } from "react-icons/ci";
+import Popup from "@/widgets/layout/popup.jsx";
 
 
 export function GeneratePv() {
@@ -22,12 +22,16 @@ export function GeneratePv() {
   const [levelsData, setLevelsData] = useState();
   const [gradesData, setGradesData] = useState();
   const [level, setLevel] = useState("1A");
-  const [grade, setGrade] = useState("1A1");
+  const [grade, setGrade] = useState("1A2");
   const [isLoading, setIsLoading] = useState(true);
   const [isPanEtudeLoadedYet, setIsPanEtudeLoadedYet] = useState(false);
-  const user = useSelector((state) => state.user);
   const [isPopupVisible, setPopupVisible] = useState(false);
-
+  const [studentData, setStudentData] = useState({
+    name: "",
+    email: "",
+    identifier: "",
+  });
+  const user = useSelector((state) => state.user);
 
 
   setUsernameAndToken(user.email);
@@ -46,7 +50,7 @@ export function GeneratePv() {
         console.log(data);
         setGrade((data.length <= 0) ? null : data[0].name);
         setGradesData(data);
-      })
+      });
     }
   }, [level, isPanEtudeLoadedYet]);
 
@@ -59,7 +63,7 @@ export function GeneratePv() {
       );
     } else
       setAuthorsTableData([]);
-  }, [grade,isPanEtudeLoadedYet]);
+  }, [grade, isPanEtudeLoadedYet]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -73,8 +77,13 @@ export function GeneratePv() {
     setGrade(item.name);
   };
 
-  const togglePopup = () => {
-    setPopupVisible(!isPopupVisible);
+  const showPopup = (name, email, identifier) => {
+    setPopupVisible(true);
+    setStudentData({ name, email, identifier ,grade});
+  };
+
+  const hidePopup = () => {
+    setPopupVisible(false);
   };
 
 
@@ -208,9 +217,9 @@ export function GeneratePv() {
                         as="a"
                         href="#"
                         className="text-[30px] text-blue-gray-600"
-                        onClick={togglePopup}
+                        onClick={() => showPopup(name, email, identifier)}
                       >
-                        <CiFaceMeh   />
+                        <CiFaceMeh />
                       </Typography>
                     </td>
                   </tr>
@@ -220,7 +229,7 @@ export function GeneratePv() {
             </tbody>
           </table>
         </CardBody>
-        <Popup show={isPopupVisible} onClose={togglePopup} />
+        <Popup show={isPopupVisible} student={studentData} onClose={hidePopup} />
       </Card>
     </div>
   );

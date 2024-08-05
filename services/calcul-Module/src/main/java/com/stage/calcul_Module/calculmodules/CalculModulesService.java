@@ -1,19 +1,22 @@
 package com.stage.calcul_Module.calculmodules;
 
-import com.stage.calcul_Module.modules.*;
+import com.stage.calcul_Module.mark.Mark;
+import com.stage.calcul_Module.mark.MarkRepository;
+import com.stage.calcul_Module.student.StudentMark;
+import com.stage.calcul_Module.student.StudentMarkRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CalculModulesService {
-    private final ModuleRepository modulesRepository;
+
     private final MarkRepository marksRepository;
     private final StudentMarkRepository studentMarkRepository;
 
@@ -22,34 +25,17 @@ public class CalculModulesService {
         int moduleId = request.idmodule();
         int studentId = request.idstudent();
 
-        List<StudentMark> studentMarksList = studentMarkRepository.findByIdstudent(studentId);
+        var marksIds = studentMarkRepository.findListIds(studentId);
 
-        List<Integer> marksIds = studentMarksList.stream()
-                .map(StudentMark::getIdmark)
-                .collect(Collectors.toList());
+        Mark mark = marksRepository.findMark(marksIds, moduleId);
 
-        List<Mark> marksList = marksRepository.findAllById(marksIds).stream()
-                .filter(mark -> mark.getIdModule() == moduleId)
-                .collect(Collectors.toList());
-
-        double average = marksList.stream()
-                .mapToDouble(mark -> {
-                    float cc = mark.getMarkCc();
-                    float exam = mark.getMarkExam();
-                    float tp = mark.getMarkTp();
-
-                    if (tp <= 0) {
-                        return (0.4 * cc) + (0.6 * exam);
-                    } else {
-                        return (0.3 * cc) + (0.2 * tp) + (0.5 * exam);
-                    }
-                })
-                .average()
-                .orElse(0.0);
+        float cc = mark.getMarkCc();
+        float exam = mark.getMarkExam();
+        float tp = mark.getMarkTp();
+        var average = (tp == -1) ? ((0.4 * cc) + (0.6 * exam)) : ((0.3 * cc) + (0.2 * tp) + (0.5 * exam));
 
         Map<String, Object> result = new HashMap<>();
         result.put(Integer.toString(moduleId), average);
-
         return result;
     }
 }

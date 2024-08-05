@@ -4,13 +4,13 @@ import "../../../public/css/style.css";
 import { RiDownloadCloud2Line } from "react-icons/ri";
 import html2pdf from "html2pdf.js";
 
-const Popup = ({ show, onClose }) => {
+const Popup = ({ show, student,onClose }) => {
 
   const generatePDF = () => {
     const element = document.getElementById("pdf-content");
     const options = {
       margin: [0.5, 0.5, 0.5, 0.5],
-      filename: "popup.pdf",
+      filename: student.name+".pdf",
       image: { type: "jpeg", quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
@@ -27,10 +27,10 @@ const Popup = ({ show, onClose }) => {
         className={`bg-white rounded-lg p-8 z-10 transform ${show ? "scale-100" : "scale-95"} transition-transform duration-300`}>
         <div id="pdf-content">
           <h2 className="text-xl mb-4 font-bold text-center">Resultat Session Principale</h2>
-          <h2 className="text-xl font-bold text-center">Name: <span className="text-red-700">omar salhi</span></h2>
-          <h2 className="text-xl font-bold text-center">Identifiant: <span className="text-red-700">211JMT9581</span>
+          <h2 className="text-xl font-bold text-center">Name: <span className="text-red-700">{student.name}</span></h2>
+          <h2 className="text-xl font-bold text-center">Identifiant: <span className="text-red-700">{student.identifier}</span>
           </h2>
-          <h2 className="text-xl font-bold text-center">Class: <span className="text-red-700">3A4</span></h2>
+          <h2 className="text-xl font-bold text-center">Class: <span className="text-red-700">{student.grade}</span></h2>
 
           <PvTable />
         </div>

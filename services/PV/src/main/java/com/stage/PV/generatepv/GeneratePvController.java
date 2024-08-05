@@ -23,5 +23,13 @@ public class GeneratePvController {
         return ResponseEntity.ok(generatePvService.retrieveStudents(request,headerValue));
     }
 
+    @PostMapping("/generate")
+    public ResponseEntity<PvResponse> generate(
+            @RequestBody PvRequest request,
+            @RequestHeader("Authorization") String headerValue
+    ){
+        return ResponseEntity.ok(generatePvService.generate(request,headerValue));
+    }
+
 
 }
