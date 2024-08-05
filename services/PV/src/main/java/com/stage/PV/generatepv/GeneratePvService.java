@@ -30,8 +30,7 @@ public class GeneratePvService {
         );
 
         return this.getUsers.getStudents(grade.getIdGrade()).orElseThrow(
-                () -> new RuntimeException("No authenticated user found"))
-                ;
+                () -> new RuntimeException("No authenticated user found"));
     }
 
     public PvResponse generate(PvRequest request, String headerValue) {
@@ -41,6 +40,8 @@ public class GeneratePvService {
 
     private UeResponse getScores(PvRequest request, String token) {
         JwtTokenContextHolder.setToken(token.substring(7));
-        return getScores.getScores(request.idStudent(), request.idPe())
+        return getScores
+                .getScores(request.idStudent(), request.idPe())
+                .orElseThrow(()->new RuntimeException("error has occurred"));
     }
 }

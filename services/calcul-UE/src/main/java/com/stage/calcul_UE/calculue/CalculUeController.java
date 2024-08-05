@@ -16,15 +16,16 @@ import java.util.Map;
 public class CalculUeController {
     private final CalculUeService calculUeService;
 
-    @PostMapping("/send-to-other")
+    @GetMapping("/send-to-other/{idStudent}/{idPe}")
     public ResponseEntity<List<ResponseUe>> sendModulesToOtherService(
-            @RequestBody CalculUeRequest request,
+            @PathVariable("idStudent") int idStudent,
+            @PathVariable("idPe") int idPe,
             @RequestHeader("Authorization") String headerValue
     ) {
         return ResponseEntity.ok(
                 calculUeService.calculate(
-                        request.idPE(),
-                        request.idStudent(),
+                        idPe,
+                        idStudent,
                         headerValue)
         );
     }
