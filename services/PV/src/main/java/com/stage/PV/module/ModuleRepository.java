@@ -1,4 +1,4 @@
-package com.stage.calcul_UE.module;
+package com.stage.PV.module;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

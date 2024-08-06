@@ -31,7 +31,6 @@ const Popup = ({ show, student,onClose }) => {
           <h2 className="text-xl font-bold text-center">Identifiant: <span className="text-red-700">{student.identifier}</span>
           </h2>
           <h2 className="text-xl font-bold text-center">Class: <span className="text-red-700">{student.grade}</span></h2>
-
           <PvTable />
         </div>
         <div className="flex items-center justify-end gap-2">

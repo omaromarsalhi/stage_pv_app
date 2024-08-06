@@ -6,6 +6,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
 import java.util.Optional;
 
 @FeignClient(
@@ -15,5 +16,5 @@ import java.util.Optional;
 public interface GetScores {
 
     @GetMapping("/{idStudent}/{idPe}")
-    Optional<UeResponse> getScores(@PathVariable("idStudent") int idStudent, @PathVariable("idPe") int idPe);
+    List<UeResponse> getScores(@PathVariable("idStudent") int idStudent, @PathVariable("idPe") int idPe);
 }

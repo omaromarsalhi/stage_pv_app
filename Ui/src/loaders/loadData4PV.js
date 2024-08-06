@@ -2,28 +2,20 @@ import { request } from "@/helpers/axios_helper.js";
 import { checkToken, getOut } from "@/helpers/refresh_token.js";
 
 
-
-
-export async function loadStudentData() {
+export async function generatePv() {
   return await checkToken().then(() => {
     return request(
       "POST",
-      "/pv/generate-pv/getStudents",
+      "/pv/generate-pv/generate",
       {
-        grade: grade,
+        idPe: 1,
+        idStudent: 923,
       }).then(
       (response) => {
-        return response.data.map(student => ({
-          img: "/img/team-2.jpeg",
-          name: student.firstName + " " + student.lastName,
-          email: student.email,
-          identifier: student.identifier,
-          online: true,
-          score: "-",
-        }));
+        return response.data
       }).catch(
       (error) => {
-        getOut();
+        console.log(error);
       },
     );
   });

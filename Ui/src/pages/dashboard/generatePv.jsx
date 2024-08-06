@@ -14,7 +14,7 @@ import {
 import { useSelector } from "react-redux";
 import { setUsernameAndToken } from "@/helpers/refresh_token.js";
 import { CiFaceMeh } from "react-icons/ci";
-import Popup from "@/widgets/layout/popup.jsx";
+import Popup from "@/pages/dashboard/popup.jsx";
 
 
 export function GeneratePv() {

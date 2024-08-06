@@ -16,12 +16,4 @@ public class UniteEnseignement {
     private int idUE;
     private String name;
 
-
-//    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    @JoinTable(
-//            name = "planetudeuniteenseignement",
-//            joinColumns = @JoinColumn(name = "student_id"),
-//            inverseJoinColumns = @JoinColumn(name = "course_id")
-//    )
-//    private List<Course> courses = new ArrayList<>();
 }

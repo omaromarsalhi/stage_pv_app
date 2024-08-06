@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/pv/generate-pv")
@@ -24,7 +26,7 @@ public class GeneratePvController {
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<PvResponse> generate(
+    public ResponseEntity<List<PvResponse>> generate(
             @RequestBody PvRequest request,
             @RequestHeader("Authorization") String headerValue
     ){

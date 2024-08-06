@@ -12,6 +12,8 @@ import java.util.Map;
 public record ResponseUe(
         int idUE,
         List<Map<String,Object>> scores,
-        float average
+        float average,
+        float nbrEtc,
+        String ueName
 ) {
 }
