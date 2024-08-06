@@ -33,7 +33,7 @@ public class UserService {
         return userRepository.findByIdentifier(identifier);
     }
     public List<UserDto> getStudents(int grade) {
-        var students = userRepository.findByRoleAndGrade(Role.STUDENT, grade);
+        var students = userRepository.findByRoleAndGrade(Role.student, grade);
         var users = new ArrayList<UserDto>();
 
         students.forEach(
