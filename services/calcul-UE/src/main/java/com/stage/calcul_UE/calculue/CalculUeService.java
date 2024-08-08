@@ -26,9 +26,10 @@ public class CalculUeService {
     private final String URL = "http://localhost:8888/api/module/calcul";
     private final UniteEnseignementRepository uniteEnseignementRepository;
 
-    public List<ResponseUe> calculate(int idPe, int idStudent, String headerValue) {
+    public List<ResponseUe> calculate(String  peName, int idStudent, String headerValue) {
+        var idPe=planEtudeRepository.findIdPlanEtudeByName(peName);
         var units = planEtudeRepository
-                .findPlanEtudeByIdPe(idPe)
+                .findPlanEtudesByIdPe(idPe)
                 .getUnites()
                 .stream()
                 .sorted(Comparator.comparing(UniteEnseignement::getIdUE))

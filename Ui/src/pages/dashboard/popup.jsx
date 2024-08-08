@@ -6,6 +6,7 @@ import html2pdf from "html2pdf.js";
 
 const Popup = ({ show, student,onClose }) => {
 
+
   const generatePDF = () => {
     const element = document.getElementById("pdf-content");
     const options = {
@@ -24,14 +25,14 @@ const Popup = ({ show, student,onClose }) => {
       className={`fixed inset-0 flex items-center justify-center z-50 ${show ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"} transition-opacity duration-300`}>
       <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300"></div>
       <div
-        className={`bg-white rounded-lg p-8 z-10 transform ${show ? "scale-100" : "scale-95"} transition-transform duration-300`}>
+        className={`bg-white rounded-lg p-4 z-10 transform ${show ? "scale-100" : "scale-95"} transition-transform duration-300`}>
         <div id="pdf-content">
-          <h2 className="text-xl mb-4 font-bold text-center">Resultat Session Principale</h2>
+          <h2 className="text-xl mb-2 font-bold text-center">Resultat Session Principale</h2>
           <h2 className="text-xl font-bold text-center">Name: <span className="text-red-700">{student.name}</span></h2>
           <h2 className="text-xl font-bold text-center">Identifiant: <span className="text-red-700">{student.identifier}</span>
           </h2>
           <h2 className="text-xl font-bold text-center">Class: <span className="text-red-700">{student.grade}</span></h2>
-          <PvTable />
+          <PvTable level={student.level} idStudent={student.idUser} />
         </div>
         <div className="flex items-center justify-end gap-2">
           <button className="bg-green-700 text-white px-4 py-2 rounded" onClick={generatePDF}>

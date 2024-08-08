@@ -28,11 +28,15 @@ public class CalculModulesService {
         var marksIds = studentMarkRepository.findListIds(studentId);
 
         Mark mark = marksRepository.findMark(marksIds, moduleId);
-
-        float cc = mark.getMarkCc();
-        float exam = mark.getMarkExam();
-        float tp = mark.getMarkTp();
-        var average = (tp == -1) ? ((0.4 * cc) + (0.6 * exam)) : ((0.3 * cc) + (0.2 * tp) + (0.5 * exam));
+        double average;
+        if (mark == null)
+            average = -1;
+        else {
+            float cc = mark.getMarkCc();
+            float exam = mark.getMarkExam();
+            float tp = mark.getMarkTp();
+            average = (tp == -1) ? ((0.4 * cc) + (0.6 * exam)) : ((0.3 * cc) + (0.2 * tp) + (0.5 * exam));
+        }
 
         Map<String, Object> result = new HashMap<>();
         result.put(Integer.toString(moduleId), average);

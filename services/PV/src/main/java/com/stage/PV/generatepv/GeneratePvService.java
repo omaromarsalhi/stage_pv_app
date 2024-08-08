@@ -79,6 +79,6 @@ public class GeneratePvService {
     private List<UeResponse> getScores(PvRequest request, String token) {
         JwtTokenContextHolder.setToken(token.substring(7));
         return getScores
-                .getScores(request.idStudent(), request.idPe());
+                .getScores(request.idStudent(), request.peName());
     }
 }

@@ -30,6 +30,9 @@ export function GeneratePv() {
     name: "",
     email: "",
     identifier: "",
+    grade: "",
+    level: "",
+    idUser: 0
   });
   const user = useSelector((state) => state.user);
 
@@ -38,7 +41,6 @@ export function GeneratePv() {
 
   useEffect(() => {
     loadPEs().then(data => {
-      console.log(data);
       setLevelsData(data);
       setIsPanEtudeLoadedYet(true);
     });
@@ -47,7 +49,6 @@ export function GeneratePv() {
   useEffect(() => {
     if (isPanEtudeLoadedYet) {
       loadGrades(level).then(data => {
-        console.log(data);
         setGrade((data.length <= 0) ? null : data[0].name);
         setGradesData(data);
       });
@@ -77,9 +78,8 @@ export function GeneratePv() {
     setGrade(item.name);
   };
 
-  const showPopup = (name, email, identifier) => {
+  const showPopup = (name, email, identifier, idUser) => {
     setPopupVisible(true);
-    setStudentData({ name, email, identifier ,grade});
   };
 
   const hidePopup = () => {
@@ -168,7 +168,7 @@ export function GeneratePv() {
             </thead>
             <tbody>
             {authorsTableData.map(
-              ({ img, name, email, identifier, online, score }, key) => {
+              ({ img, idUser, name, email, identifier, online, score }, key) => {
                 const className = `py-3 px-5 ${
                   key === authorsTableData.length - 1
                     ? ""
@@ -217,7 +217,10 @@ export function GeneratePv() {
                         as="a"
                         href="#"
                         className="text-[30px] text-blue-gray-600"
-                        onClick={() => showPopup(name, email, identifier)}
+                        onClick={() => {
+                          setStudentData({ name, email, identifier,grade, level, idUser });
+                          showPopup();
+                        }}
                       >
                         <CiFaceMeh />
                       </Typography>

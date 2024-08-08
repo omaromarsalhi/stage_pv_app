@@ -15,6 +15,6 @@ import java.util.Optional;
 )
 public interface GetScores {
 
-    @GetMapping("/{idStudent}/{idPe}")
-    List<UeResponse> getScores(@PathVariable("idStudent") int idStudent, @PathVariable("idPe") int idPe);
+    @GetMapping("/{idStudent}/{peName}")
+    List<UeResponse> getScores(@PathVariable("idStudent") int idStudent, @PathVariable("peName") String peName);
 }
