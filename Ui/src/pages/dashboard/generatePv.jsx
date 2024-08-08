@@ -151,7 +151,7 @@ export function GeneratePv() {
           <table className="w-full min-w-[640px] table-auto">
             <thead>
             <tr>
-              {["Student", "Identifier", "Financial Status", "Score", ""].map((el) => (
+              {["Student", "Identifier", "Financial Status", ""].map((el) => (
                 <th
                   key={el}
                   className="border-b border-blue-gray-50 py-3 px-5 text-left "
@@ -168,7 +168,7 @@ export function GeneratePv() {
             </thead>
             <tbody>
             {authorsTableData.map(
-              ({ img, idUser, name, email, identifier, online, score }, key) => {
+              ({ img, idUser, name, email, identifier, online }, key) => {
                 const className = `py-3 px-5 ${
                   key === authorsTableData.length - 1
                     ? ""
@@ -202,15 +202,10 @@ export function GeneratePv() {
                     <td className={className}>
                       <Chip
                         variant="gradient"
-                        color={online ? "green" : "red"}
-                        value={online ? "payee" : "non payee"}
+                        color={!online ? "green" : "red"}
+                        value={!online ? "payee" : "non payee"}
                         className="py-0.5 px-2 text-[11px] font-medium w-fit"
                       />
-                    </td>
-                    <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {score}
-                      </Typography>
                     </td>
                     <td className={className}>
                       <Typography

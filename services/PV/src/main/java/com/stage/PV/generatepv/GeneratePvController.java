@@ -26,7 +26,7 @@ public class GeneratePvController {
     }
 
     @PostMapping("/generate")
-    public ResponseEntity<List<PvResponse>> generate(
+    public ResponseEntity<PvFinalResponse> generate(
             @RequestBody PvRequest request,
             @RequestHeader("Authorization") String headerValue
     ){

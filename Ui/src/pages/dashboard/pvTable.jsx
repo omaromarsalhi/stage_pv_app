@@ -9,13 +9,21 @@ import { generatePv } from "@/loaders/loadData4PV.js";
 import { useEffect, useState } from "react";
 
 
-export function PvTable({ level, idStudent }) {
-  const [projectsTableData, setProjectsTableData] = useState([]);
+export function PvTable({ grade, level, idStudent }) {
+  const [projectsTableData, setProjectsTableData] = useState({
+    pvResponseList: [],
+    result: "",
+    finalScore: 0,
+  });
 
   useEffect(() => {
-    console.log(level, idStudent);
     if (idStudent !== 0)
-      generatePv(level, idStudent).then(data => setProjectsTableData(data));
+      generatePv(grade, level, idStudent).then(data => {
+        const result = data.result;
+        const finalScore = data.finalScore;
+        const pvResponseList = data.pvResponseList;
+        setProjectsTableData({ pvResponseList, result, finalScore });
+      });
   }, [level, idStudent]);
 
   return (
@@ -43,7 +51,7 @@ export function PvTable({ level, idStudent }) {
             </tr>
             </thead>
             <tbody className="border-s border-e border-b border-gray-500  mb-2">
-            {projectsTableData.map(
+            {projectsTableData.pvResponseList.map(
               ({ name, nbr_etc, moy_ue, module, coef, moy_module }, key) => {
                 const className = `py-3 px-5 ${
                   key === projectsTableData.length - 1
@@ -193,7 +201,7 @@ export function PvTable({ level, idStudent }) {
                 color="blue-gray"
                 className="font-bold  "
               >
-                Admin
+                {projectsTableData.result}
               </Typography>
             </div>
           </td>
@@ -204,7 +212,7 @@ export function PvTable({ level, idStudent }) {
                 color="blue-gray"
                 className="font-bold  "
               >
-                17.05/20
+                {projectsTableData.finalScore.toFixed(2)}/20
               </Typography>
             </div>
           </td>

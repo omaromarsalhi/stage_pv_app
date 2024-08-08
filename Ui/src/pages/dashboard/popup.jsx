@@ -32,7 +32,7 @@ const Popup = ({ show, student,onClose }) => {
           <h2 className="text-xl font-bold text-center">Identifiant: <span className="text-red-700">{student.identifier}</span>
           </h2>
           <h2 className="text-xl font-bold text-center">Class: <span className="text-red-700">{student.grade}</span></h2>
-          <PvTable level={student.level} idStudent={student.idUser} />
+          <PvTable grade={student.grade} level={student.level} idStudent={student.idUser} />
         </div>
         <div className="flex items-center justify-end gap-2">
           <button className="bg-green-700 text-white px-4 py-2 rounded" onClick={generatePDF}>

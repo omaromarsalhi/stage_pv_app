@@ -2,13 +2,13 @@ import { request } from "@/helpers/axios_helper.js";
 import { checkToken, getOut } from "@/helpers/refresh_token.js";
 
 
-export async function generatePv(peName,idStudent) {
-  console.log(peName,idStudent);
+export async function generatePv(grade,peName,idStudent) {
   return await checkToken().then(() => {
     return request(
       "POST",
       "/pv/generate-pv/generate",
       {
+        grade: grade,
         peName: peName,
         idStudent: idStudent,
       }).then(
