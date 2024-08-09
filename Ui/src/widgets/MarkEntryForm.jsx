@@ -8,9 +8,9 @@ const MarkEntryForm = ({ users, onSubmit }) => {
             const updatedMarks = [...prevMarks];
             const markIndex = updatedMarks.findIndex(m => m.idUser === idUser);
             if (markIndex > -1) {
-                updatedMarks[markIndex].mark = mark;
+                updatedMarks[markIndex].mark = parseFloat(mark); // Ensure mark is a number
             } else {
-                updatedMarks.push({ idUser, mark });
+                updatedMarks.push({ idUser, mark: parseFloat(mark) });
             }
             return updatedMarks;
         });
@@ -20,12 +20,12 @@ const MarkEntryForm = ({ users, onSubmit }) => {
         <div>
             <h3>Enter Marks</h3>
             {users.map(user => (
-                <div key={user.id}>
+                <div key={user.idUser}>
                     <span>{user.firstname} {user.lastname}</span>
                     <input
                         type="number"
                         placeholder="Enter mark"
-                        onChange={(e) => handleMarkChange(user.id, e.target.value)}
+                        onChange={(e) => handleMarkChange(user.idUser, e.target.value)}
                     />
                 </div>
             ))}

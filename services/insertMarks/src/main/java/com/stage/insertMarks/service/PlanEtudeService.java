@@ -18,7 +18,7 @@ public class PlanEtudeService {
         return planEtudeRepository.findAll();
     }
 
-    public Optional<PlanEtude> getPlanEtudeById(Long idPE) {
+    public Optional<PlanEtude> getPlanEtudeById(Integer idPE) {
         return planEtudeRepository.findById(idPE);
     }
 
@@ -26,7 +26,7 @@ public class PlanEtudeService {
         return planEtudeRepository.save(planEtude);
     }
 
-    public void deletePlanEtude(Long idPE) {
+    public void deletePlanEtude(Integer idPE) {
         planEtudeRepository.deleteById(idPE);
     }
 }

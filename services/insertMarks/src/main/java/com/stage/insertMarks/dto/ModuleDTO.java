@@ -1,8 +1,11 @@
 package com.stage.insertMarks.dto;
 
+import jakarta.validation.constraints.NotNull;
+
 public class ModuleDTO {
     private Integer idModule;
     private String name;
+    @NotNull(message = "Coefficient cannot be null")
     private Float coefficient;
 
     // Constructeurs, getters, setters

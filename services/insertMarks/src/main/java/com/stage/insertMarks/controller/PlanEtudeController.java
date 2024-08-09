@@ -11,18 +11,21 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/planEtudes")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class PlanEtudeController {
 
     @Autowired
     private PlanEtudeService planEtudeService;
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping
     public List<PlanEtude> getAllPlanEtudes() {
         return planEtudeService.getAllPlanEtudes();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/{idPE}")
-    public ResponseEntity<PlanEtude> getPlanEtudeById(@PathVariable Long idPE) {
+    public ResponseEntity<PlanEtude> getPlanEtudeById(@PathVariable Integer idPE) {
         Optional<PlanEtude> planEtude = planEtudeService.getPlanEtudeById(idPE);
         if (planEtude.isPresent()) {
             return ResponseEntity.ok(planEtude.get());
@@ -31,13 +34,14 @@ public class PlanEtudeController {
         }
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @PostMapping
     public PlanEtude createPlanEtude(@RequestBody PlanEtude planEtude) {
         return planEtudeService.savePlanEtude(planEtude);
     }
 
     @DeleteMapping("/{idPE}")
-    public ResponseEntity<Void> deletePlanEtude(@PathVariable Long idPE) {
+    public ResponseEntity<Void> deletePlanEtude(@PathVariable Integer idPE) {
         planEtudeService.deletePlanEtude(idPE);
         return ResponseEntity.noContent().build();
     }

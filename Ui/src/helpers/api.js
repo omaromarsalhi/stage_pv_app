@@ -25,7 +25,7 @@ export const loadGrades = async (moduleId) => {
 
 export const loadStudents = async (gradeId) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/students`, {
+        const response = await axios.get(`${API_BASE_URL}/users`, {
             params: { gradeId }
         });
         return response.data;

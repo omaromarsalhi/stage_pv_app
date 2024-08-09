@@ -18,23 +18,28 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/studentMarks")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000")
 public class StudentMarkController {
 
     @Autowired
     private StudentMarkService studentMarkService;
-
+    @CrossOrigin(origins = "http://localhost:3000/")
     @PostMapping
     public ResponseEntity<StudentMarkDTO> createStudentMark(@RequestBody StudentMarkDTO studentMarkDTO) {
+        System.out.println("Received StudentMarkDTO: " + studentMarkDTO);
         try {
+            // Ajoutez des vérifications ou des validations ici si nécessaire
             StudentMark studentMark = convertToEntity(studentMarkDTO);
             StudentMark savedStudentMark = studentMarkService.saveStudentMark(studentMark);
             return new ResponseEntity<>(convertToDTO(savedStudentMark), HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error creating StudentMark", e);
         }
     }
 
+
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping
     public ResponseEntity<List<StudentMarkDTO>> getAllStudentMarks() {
         try {
@@ -47,7 +52,7 @@ public class StudentMarkController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error retrieving StudentMarks", e);
         }
     }
-
+    @CrossOrigin(origins = "http://localhost:3000/")
     @DeleteMapping("/{studentId}/{markId}")
     public ResponseEntity<Void> deleteStudentMark(@PathVariable Integer studentId, @PathVariable Integer markId) {
         try {
@@ -94,7 +99,7 @@ public class StudentMarkController {
 
     private Mark convertToEntity(MarkDTO markDTO) {
         Mark mark = new Mark();
-        mark.setIdMark(markDTO.getIdMark());
+        // Ne pas setter l'ID si vous voulez que la base de données le génère
         mark.setMarkCc(markDTO.getMarkCc());
         mark.setMarkExam(markDTO.getMarkExam());
         mark.setMarkTp(markDTO.getMarkTp());
@@ -103,10 +108,15 @@ public class StudentMarkController {
     }
 
     private Module convertToEntity(ModuleDTO moduleDTO) {
+        if (moduleDTO.getCoefficient() == null) {
+            throw new IllegalArgumentException("Coefficient cannot be null");
+        }
+
         Module module = new Module();
         module.setIdModule(moduleDTO.getIdModule());
         module.setName(moduleDTO.getName());
         module.setCoefficient(moduleDTO.getCoefficient());
         return module;
     }
+
 }

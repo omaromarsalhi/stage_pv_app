@@ -9,27 +9,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/grades")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class GradeController {
     @Autowired
     private GradeService gradeService;
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping
     public List<Grade> getAllGrades() {
         return gradeService.getAllGrades();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/{id}")
-    public Grade getGradeById(@PathVariable Long id) {
+    public Grade getGradeById(@PathVariable Integer id) {
         return gradeService.getGradeById(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @PostMapping
     public Grade createGrade(@RequestBody Grade grade) {
         return gradeService.saveGrade(grade);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000/")
     @DeleteMapping("/{id}")
-    public void deleteGrade(@PathVariable Long id) {
+    public void deleteGrade(@PathVariable Integer id) {
         gradeService.deleteGrade(id);
     }
 }

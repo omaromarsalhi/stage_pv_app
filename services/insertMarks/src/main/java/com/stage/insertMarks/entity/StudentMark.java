@@ -20,7 +20,7 @@ public class StudentMark {
     @JoinColumn(name = "idStudent", insertable = false, updatable = false)
     private User user; // Représente l'étudiant
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "idMark", insertable = false, updatable = false)
     private Mark mark;
 

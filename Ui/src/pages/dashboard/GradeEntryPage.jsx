@@ -13,10 +13,28 @@ const GradeEntryPage = () => {
     const [marks, setMarks] = useState({});
 
     useEffect(() => {
-        loadModules().then(setModules);
-        loadGrades().then(setGrades);
-        loadStudents().then(setStudents);
-    }, []);
+        const fetchData = async () => {
+            try {
+                const modulesData = await loadModules();
+                setModules(modulesData);
+
+                if (selectedModule) {
+                    const gradesData = await loadGrades(selectedModule.idModule);
+                    setGrades(gradesData);
+                }
+
+                if (selectedGrade) {
+                    const usersData = await loadStudents(selectedGrade.idGrade);
+                    const studentsData = usersData.filter(user => user.role === 'student'); // Filtrer les étudiants
+                    setStudents(studentsData);
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        };
+
+        fetchData();
+    }, [selectedModule, selectedGrade]);
 
     const handleModuleChange = (module) => setSelectedModule(module);
     const handleGradeChange = (grade) => setSelectedGrade(grade);
@@ -25,13 +43,19 @@ const GradeEntryPage = () => {
             ...prevMarks,
             [studentId]: {
                 ...prevMarks[studentId],
-                [markType]: value
+                [markType]: parseFloat(value) || 0
             }
         }));
     };
 
-    const handleSubmit = () => {
-        submitMarks({ module: selectedModule, grade: selectedGrade, marks });
+    const handleSubmit = async () => {
+        try {
+            await submitMarks({ module: selectedModule, grade: selectedGrade, marks });
+            alert('Marks submitted successfully');
+        } catch (error) {
+            console.error('Error submitting marks:', error);
+            alert('Failed to submit marks');
+        }
     };
 
     return (

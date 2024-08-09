@@ -16,7 +16,7 @@ public class GradeService {
         return gradeRepository.findAll();
     }
 
-    public Grade getGradeById(Long id) {
+    public Grade getGradeById(Integer id) {
         return gradeRepository.findById(id).orElse(null);
     }
 
@@ -24,7 +24,7 @@ public class GradeService {
         return gradeRepository.save(grade);
     }
 
-    public void deleteGrade(Long id) {
+    public void deleteGrade(Integer id) {
         gradeRepository.deleteById(id);
     }
 }

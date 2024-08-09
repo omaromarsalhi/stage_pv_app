@@ -12,13 +12,14 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/marks")
-@CrossOrigin("*")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class MarkController {
 
     @Autowired
     private MarkService markService;
 
     // Create or Update a Mark
+    @CrossOrigin(origins = "http://localhost:3000/")
     @PostMapping
     public ResponseEntity<Mark> createOrUpdateMark(@RequestBody Mark mark) {
         Mark savedMark = markService.saveMark(mark);
@@ -26,6 +27,7 @@ public class MarkController {
     }
 
     // Get a Mark by ID
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/{id}")
     public ResponseEntity<Mark> getMarkById(@PathVariable("id") Integer id) {
         Optional<Mark> mark = markService.getMarkById(id);
@@ -37,6 +39,7 @@ public class MarkController {
     }
 
     // Get All Marks
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping
     public ResponseEntity<List<Mark>> getAllMark() {
         List<Mark> marks = markService.getAllMark();
@@ -44,6 +47,7 @@ public class MarkController {
     }
 
     // Delete a Mark by ID
+    @CrossOrigin(origins = "http://localhost:3000/")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMark(@PathVariable("id") Integer id) {
         Optional<Mark> mark = markService.getMarkById(id);

@@ -12,20 +12,23 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@CrossOrigin(origins = "http://localhost:3000/")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
     // Get all users
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAllUsers();
     }
 
     // Get user by ID
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/{idUser}")
-    public ResponseEntity<User> getUserById(@PathVariable Long idUser) {
+    public ResponseEntity<User> getUserById(@PathVariable Integer idUser) {
         Optional<User> user = userService.getUserById(idUser);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
@@ -37,12 +40,13 @@ public class UserController {
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
+    @CrossOrigin(origins = "http://localhost:3000/")
     @GetMapping("/identifier")
     public ResponseEntity<User> getUserByIdentifier(@RequestParam String identifier) {
         Optional<User> user = userService.getUserByIdentifier(identifier);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+    @CrossOrigin(origins = "http://localhost:3000/")
     @PostMapping("/students/{idGrade}")
     public ResponseEntity<List<UserDto>> getUsers(
             @PathVariable("idGrade") int idGrade
