@@ -19,9 +19,8 @@ const Popup = ({ show, student,onClose }) => {
         logging: true,
         letterRendering: true,
       },
-        jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
+      jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
     };
-
     html2pdf().from(element).set(options).save();
   };
 
