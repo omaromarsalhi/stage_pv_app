@@ -1,0 +1,171 @@
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { loadGradesAndModules } from "@/loaders/loadProfessorData.js";
+
+export function InsertMarks() {
+  // State to hold selected grade and student marks
+  const [gradesAndModule, setGradesAndModule] = useState([]);
+  const [grade, setGrade] = useState("");
+  const [module, setModule] = useState({
+    moduleName: "",
+    moduleId: 10,
+  });
+  const [studentMarks, setStudentMarks] = useState({});
+  const [students, setStudents] = useState([
+    { id: 1, name: "Student A" },
+    { id: 2, name: "Student B" },
+    { id: 3, name: "Student C" },
+    // Add more students as needed
+  ]);
+  const user = useSelector((state) => state.user);
+
+  useEffect(() => {
+    loadGradesAndModules(user.idUser).then(data => {
+      console.log(data);
+      const gradeName = data.data[0].gradeName;
+      const moduleName = data.data[0].moduleName;
+      const moduleId = data.data[0].moduleId;
+      setModule({ moduleName, moduleId });
+      setGrade(gradeName);
+      setGradesAndModule(data.data);
+    });
+  }, []);
+
+
+  const handleGradeChange = (event) => {
+    setGrade(event.target.value);
+    gradesAndModule.map(
+      ({ gradeName, moduleName, moduleId }) => {
+        if (event.target.value === gradeName) {
+          setModule({ moduleName, moduleId });
+        }
+      },
+    );
+  };
+
+
+  const handlMmoduleChange = (event) => {
+    setModule(event.target.value);
+    // You can add logic here to fetch students for the selected grade
+  };
+
+
+  // Function to handle marks input change
+  const handleMarksChange = (id, type, value) => {
+    setStudentMarks((prevMarks) => ({
+      ...prevMarks,
+      [id]: {
+        ...prevMarks[id],
+        [type]: value,
+      },
+    }));
+  };
+
+  // Function to handle form submission
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Marks submitted: ", studentMarks);
+    // You can add logic here to save marks in your backend
+  };
+
+  return (
+    <div className="container mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4">Insert Student Marks</h2>
+
+      {/* Grade Selection */}
+      <div className="mb-4 flex flex-row items-center gap-5">
+        <div className="flex gap-5 justify-center items-center w-full">
+          <label className="block text-sm font-medium text-gray-700">
+            Select Grade:
+          </label>
+          <select
+            value={grade}
+            onChange={handleGradeChange}
+            className="mt-1 block w-full p-2 border border-gray-300 rounded-md"
+          >
+            {
+              gradesAndModule.map(
+                ({ gradeName }) => {
+                  return (
+                    <option value={gradeName}>{gradeName}</option>
+                  );
+                },
+              )
+            }
+          </select>
+        </div>
+        <div className="flex gap-5 justify-center items-center w-full">
+          <label className="block text-size[20px] text-gray-700">
+            <h2>Module: <span className="text-red-700">{module.moduleName}</span></h2>
+          </label>
+        </div>
+      </div>
+
+
+      {/* Marks Table */}
+      <form onSubmit={handleSubmit} className="pt-4">
+        <table className="min-w-full bg-white ">
+          <thead>
+          <tr>
+            <th className="py-2 px-4 border-b flex justify-start">Student</th>
+            <th className="py-2 px-4 border-b">Exam Mark</th>
+            <th className="py-2 px-4 border-b">TP</th>
+            <th className="py-2 px-4 border-b">CC</th>
+          </tr>
+          </thead>
+          <tbody>
+          {students.map((student) => (
+            <tr key={student.id}>
+              <td className="py-2 px-4 border-b flex justify-start">
+                {student.name}
+              </td>
+              <td className="py-2 px-4 border-b ">
+                <input
+                  type="number"
+                  placeholder="Exam Mark"
+                  value={studentMarks[student.id]?.exam || ""}
+                  onChange={(e) => handleMarksChange(student.id, "exam", e.target.value)}
+                  className="border p-2 rounded w-full"
+                />
+              </td>
+              <td className="py-2 px-4 border-b">
+                <input
+                  type="number"
+                  placeholder="TP"
+                  value={studentMarks[student.id]?.tp || ""}
+                  onChange={(e) => handleMarksChange(student.id, "tp", e.target.value)}
+                  className="border p-2 rounded w-full"
+                />
+              </td>
+              <td className="py-2 px-4 border-b">
+                <input
+                  type="number"
+                  placeholder="CC"
+                  value={studentMarks[student.id]?.cc || ""}
+                  onChange={(e) => handleMarksChange(student.id, "cc", e.target.value)}
+                  className="border p-2 rounded w-full"
+                />
+              </td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
+
+        <div className="flex items-center justify-end">
+          <button
+            type="submit"
+            className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md"
+          >
+            Submit Marks
+          </button>
+        </div>
+      </form>
+    </div>
+  );
+};
+
+export default InsertMarks;
+
+
+
+

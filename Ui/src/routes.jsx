@@ -6,7 +6,7 @@ import {
   ServerStackIcon,
   RectangleStackIcon,
 } from "@heroicons/react/24/solid";
-import { Home, Profile, Tables, Notifications, GeneratePv, Test } from "@/pages/dashboard";
+import { Home, Profile, Tables, Notifications, GeneratePv, Test, InsertMarks } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import { RiAiGenerate } from "react-icons/ri";
 
@@ -29,6 +29,12 @@ export const routes = [
         name: "generatePv",
         path: "/generatePv",
         element: <GeneratePv />,
+      },
+      {
+        icon: <RiAiGenerate {...icon} />,
+        name: "insertMarks",
+        path: "/insertMarks",
+        element: <InsertMarks />,
       },
       {
         icon: <UserCircleIcon {...icon} />,

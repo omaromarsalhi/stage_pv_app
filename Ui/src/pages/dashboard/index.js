@@ -5,3 +5,4 @@ export * from "@/pages/dashboard/notifications";
 export * from "@/pages/dashboard/generatePv";
 export * from "@/pages/dashboard/test";
 export * from "@/pages/dashboard/pvTable";
+export * from "@/pages/dashboard/insertMarks";

@@ -29,3 +29,7 @@ spring:
           uri: lb:http://CALCUL-UE
           predicates:
             - Path=/api/ue/**
+        - id: insertMarks
+          uri: lb:http://INSERTMARKS
+          predicates:
+            - Path=/api/marks/**

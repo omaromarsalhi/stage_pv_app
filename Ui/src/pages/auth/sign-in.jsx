@@ -55,6 +55,7 @@ export function SignIn() {
           lastname: response.data.lastname,
           email: response.data.email,
           role: response.data.role,
+          idUser: response.data.idUser,
         };
 
         dispatch({ type: 'SET_USER', payload: userData });

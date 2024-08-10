@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/services/calcul-UE/pom.xml" />
         <option value="$PROJECT_DIR$/services/authentification/pom.xml" />
         <option value="$PROJECT_DIR$/services/calcul-Module/pom.xml" />
+        <option value="$PROJECT_DIR$/services/insertMarks/pom.xml" />
       </list>
     </option>
   </component>
