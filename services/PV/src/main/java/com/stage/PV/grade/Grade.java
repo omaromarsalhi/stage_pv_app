@@ -21,5 +21,4 @@ public class Grade {
     Integer idGrade;
 
     String name;
-
 }

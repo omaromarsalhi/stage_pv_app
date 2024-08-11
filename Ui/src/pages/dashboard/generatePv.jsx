@@ -13,6 +13,8 @@ import {
 } from "@/loaders/laodStudents.js";
 import { useSelector } from "react-redux";
 import { setUsernameAndToken } from "@/helpers/refresh_token.js";
+import { CiFaceMeh } from "react-icons/ci";
+import Popup from "@/pages/dashboard/popup.jsx";
 
 
 export function GeneratePv() {
@@ -20,16 +22,25 @@ export function GeneratePv() {
   const [levelsData, setLevelsData] = useState();
   const [gradesData, setGradesData] = useState();
   const [level, setLevel] = useState("1A");
-  const [grade, setGrade] = useState("1A1");
+  const [grade, setGrade] = useState("1A2");
   const [isLoading, setIsLoading] = useState(true);
   const [isPanEtudeLoadedYet, setIsPanEtudeLoadedYet] = useState(false);
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [studentData, setStudentData] = useState({
+    name: "",
+    email: "",
+    identifier: "",
+    grade: "",
+    level: "",
+    idUser: 0
+  });
   const user = useSelector((state) => state.user);
+
 
   setUsernameAndToken(user.email);
 
   useEffect(() => {
     loadPEs().then(data => {
-      console.log(data);
       setLevelsData(data);
       setIsPanEtudeLoadedYet(true);
     });
@@ -38,10 +49,9 @@ export function GeneratePv() {
   useEffect(() => {
     if (isPanEtudeLoadedYet) {
       loadGrades(level).then(data => {
-        console.log(data);
         setGrade((data.length <= 0) ? null : data[0].name);
         setGradesData(data);
-      })
+      });
     }
   }, [level, isPanEtudeLoadedYet]);
 
@@ -54,7 +64,7 @@ export function GeneratePv() {
       );
     } else
       setAuthorsTableData([]);
-  }, [grade,isPanEtudeLoadedYet]);
+  }, [grade, isPanEtudeLoadedYet]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -66,6 +76,14 @@ export function GeneratePv() {
 
   const handleGradeOnClick = (item) => {
     setGrade(item.name);
+  };
+
+  const showPopup = (name, email, identifier, idUser) => {
+    setPopupVisible(true);
+  };
+
+  const hidePopup = () => {
+    setPopupVisible(false);
   };
 
 
@@ -133,7 +151,7 @@ export function GeneratePv() {
           <table className="w-full min-w-[640px] table-auto">
             <thead>
             <tr>
-              {["Student", "Identifier", "Financial Status", "Score", ""].map((el) => (
+              {["Student", "Identifier", "Financial Status", ""].map((el) => (
                 <th
                   key={el}
                   className="border-b border-blue-gray-50 py-3 px-5 text-left "
@@ -150,7 +168,7 @@ export function GeneratePv() {
             </thead>
             <tbody>
             {authorsTableData.map(
-              ({ img, name, email, identifier, online, score }, key) => {
+              ({ img, idUser, name, email, identifier, online }, key) => {
                 const className = `py-3 px-5 ${
                   key === authorsTableData.length - 1
                     ? ""
@@ -184,23 +202,22 @@ export function GeneratePv() {
                     <td className={className}>
                       <Chip
                         variant="gradient"
-                        color={online ? "green" : "blue-gray"}
-                        value={online ? "payee" : "Non payee"}
+                        color={!online ? "green" : "red"}
+                        value={!online ? "payee" : "non payee"}
                         className="py-0.5 px-2 text-[11px] font-medium w-fit"
                       />
-                    </td>
-                    <td className={className}>
-                      <Typography className="text-xs font-semibold text-blue-gray-600">
-                        {score}
-                      </Typography>
                     </td>
                     <td className={className}>
                       <Typography
                         as="a"
                         href="#"
-                        className="text-xs font-semibold text-blue-gray-600"
+                        className="text-[30px] text-blue-gray-600"
+                        onClick={() => {
+                          setStudentData({ name, email, identifier,grade, level, idUser });
+                          showPopup();
+                        }}
                       >
-                        GeneratePv
+                        <CiFaceMeh />
                       </Typography>
                     </td>
                   </tr>
@@ -210,6 +227,7 @@ export function GeneratePv() {
             </tbody>
           </table>
         </CardBody>
+        <Popup show={isPopupVisible} student={studentData} onClose={hidePopup} />
       </Card>
     </div>
   );

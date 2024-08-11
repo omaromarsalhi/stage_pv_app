@@ -11,7 +11,10 @@
         <module name="PV" />
         <module name="authentification" />
         <module name="discovery" />
+        <module name="calcul_Module" />
         <module name="gateway" />
+        <module name="insertMarks" />
+        <module name="calcul_UE" />
       </profile>
     </annotationProcessing>
   </component>
@@ -19,9 +22,12 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="PV" options="-parameters" />
       <module name="authentification" options="-parameters" />
+      <module name="calcul_Module" options="-parameters" />
+      <module name="calcul_UE" options="-parameters" />
       <module name="config-server" options="-parameters" />
       <module name="discovery" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="insertMarks" options="-parameters" />
     </option>
   </component>
 </project>

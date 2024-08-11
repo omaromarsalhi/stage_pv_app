@@ -34,9 +34,11 @@ export const request = (method, url, data) => {
     if (getAuthToken() !== null && getAuthToken() !== "null") {
         headers = {'Authorization': `Bearer ${getAuthToken()}`};
     }
+
     return axios({
         method: method,
         url: url,
         headers: headers,
-        data: data});
+        data: data
+    });
 };

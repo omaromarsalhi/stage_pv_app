@@ -1,4 +1,4 @@
-package com.stage.PV.user;
+package com.stage.PV.confing;
 
 import org.springframework.stereotype.Component;
 

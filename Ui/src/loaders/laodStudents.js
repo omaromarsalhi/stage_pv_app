@@ -46,6 +46,7 @@ export async function loadStudents(grade) {
       (response) => {
         return response.data.map(student => ({
           img: "/img/team-2.jpeg",
+          idUser: student.idUser,
           name: student.firstName + " " + student.lastName,
           email: student.email,
           identifier: student.identifier,
