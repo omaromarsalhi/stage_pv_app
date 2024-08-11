@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { loadGradesAndModules } from "@/loaders/loadProfessorData.js";
+import {
+  loadGradesAndModules,
+  loadStudentsForSpecificProfessor,
+  saveStudentsMarks,
+} from "@/loaders/loadProfessorData.js";
+import { Avatar, Typography } from "@material-tailwind/react";
 
 export function InsertMarks() {
-  // State to hold selected grade and student marks
   const [gradesAndModule, setGradesAndModule] = useState([]);
   const [grade, setGrade] = useState("");
   const [module, setModule] = useState({
     moduleName: "",
-    moduleId: 10,
+    moduleId: 0,
   });
   const [studentMarks, setStudentMarks] = useState({});
-  const [students, setStudents] = useState([
-    { id: 1, name: "Student A" },
-    { id: 2, name: "Student B" },
-    { id: 3, name: "Student C" },
-    // Add more students as needed
-  ]);
+  const [students, setStudents] = useState([]);
   const user = useSelector((state) => state.user);
 
   useEffect(() => {
     loadGradesAndModules(user.idUser).then(data => {
-      console.log(data);
       const gradeName = data.data[0].gradeName;
       const moduleName = data.data[0].moduleName;
       const moduleId = data.data[0].moduleId;
@@ -30,6 +28,14 @@ export function InsertMarks() {
       setGradesAndModule(data.data);
     });
   }, []);
+
+
+  useEffect(() => {
+    if (grade !== "")
+      loadStudentsForSpecificProfessor(grade).then(data => {
+        setStudents(data);
+      });
+  }, [grade]);
 
 
   const handleGradeChange = (event) => {
@@ -44,13 +50,6 @@ export function InsertMarks() {
   };
 
 
-  const handlMmoduleChange = (event) => {
-    setModule(event.target.value);
-    // You can add logic here to fetch students for the selected grade
-  };
-
-
-  // Function to handle marks input change
   const handleMarksChange = (id, type, value) => {
     setStudentMarks((prevMarks) => ({
       ...prevMarks,
@@ -59,13 +58,14 @@ export function InsertMarks() {
         [type]: value,
       },
     }));
+    console.log(studentMarks);
   };
 
-  // Function to handle form submission
+
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Marks submitted: ", studentMarks);
-    // You can add logic here to save marks in your backend
+    saveStudentsMarks(module.moduleId,studentMarks).then(() => console.log("done"));
   };
 
   return (
@@ -102,7 +102,6 @@ export function InsertMarks() {
       </div>
 
 
-      {/* Marks Table */}
       <form onSubmit={handleSubmit} className="pt-4">
         <table className="min-w-full bg-white ">
           <thead>
@@ -115,16 +114,30 @@ export function InsertMarks() {
           </thead>
           <tbody>
           {students.map((student) => (
-            <tr key={student.id}>
+            <tr key={student.idUser}>
               <td className="py-2 px-4 border-b flex justify-start">
-                {student.name}
+                <div className="flex items-center gap-4">
+                  <Avatar src="/img/team-2.jpeg" size="sm" variant="rounded" />
+                  <div>
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semibold"
+                    >
+                      {student.firstName + " " + student.lastName}
+                    </Typography>
+                    <Typography className="text-xs font-normal text-blue-gray-500">
+                      {student.email}
+                    </Typography>
+                  </div>
+                </div>
               </td>
               <td className="py-2 px-4 border-b ">
                 <input
                   type="number"
                   placeholder="Exam Mark"
-                  value={studentMarks[student.id]?.exam || ""}
-                  onChange={(e) => handleMarksChange(student.id, "exam", e.target.value)}
+                  value={studentMarks[student.idUser]?.exam || ""}
+                  onChange={(e) => handleMarksChange(student.idUser, "exam", e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </td>
@@ -132,8 +145,8 @@ export function InsertMarks() {
                 <input
                   type="number"
                   placeholder="TP"
-                  value={studentMarks[student.id]?.tp || ""}
-                  onChange={(e) => handleMarksChange(student.id, "tp", e.target.value)}
+                  value={studentMarks[student.idUser]?.tp || -1}
+                  onChange={(e) => handleMarksChange(student.idUser, "tp", e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </td>
@@ -141,8 +154,8 @@ export function InsertMarks() {
                 <input
                   type="number"
                   placeholder="CC"
-                  value={studentMarks[student.id]?.cc || ""}
-                  onChange={(e) => handleMarksChange(student.id, "cc", e.target.value)}
+                  value={studentMarks[student.idUser]?.cc || ""}
+                  onChange={(e) => handleMarksChange(student.idUser, "cc", e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </td>

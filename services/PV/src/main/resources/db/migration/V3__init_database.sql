@@ -6,3 +6,5 @@ CREATE TABLE IF NOT EXISTS GradeProfessor
     idGrade INTEGER,
     idModule INTEGER
 );
+
+

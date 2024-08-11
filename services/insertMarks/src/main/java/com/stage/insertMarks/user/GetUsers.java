@@ -14,5 +14,5 @@ import java.util.Optional;
 public interface GetUsers {
 
     @PostMapping("/students/{idGrade}")
-    Optional<List<UserResponse>> getStudents(@PathVariable("idGrade") int idGrade);
+    Optional<List<StudentResponse>> getStudents(@PathVariable("idGrade") int idGrade);
 }
