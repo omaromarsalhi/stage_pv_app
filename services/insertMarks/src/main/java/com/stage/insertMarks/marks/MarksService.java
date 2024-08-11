@@ -2,8 +2,6 @@ package com.stage.insertMarks.marks;
 
 
 import com.stage.PV.confing.JwtTokenContextHolder;
-import com.stage.PV.generatepv.StudentsRequest;
-import com.stage.PV.user.UserResponse;
 import com.stage.insertMarks.grade.GradeRepository;
 import com.stage.insertMarks.gradeprofessor.GradeProfessor;
 import com.stage.insertMarks.gradeprofessor.GradeProfessorRepository;
@@ -13,7 +11,6 @@ import com.stage.insertMarks.module.ModuleRepository;
 import com.stage.insertMarks.studentmark.StudentMark;
 import com.stage.insertMarks.studentmark.StudentMarkRepository;
 import com.stage.insertMarks.user.GetUsers;
-import com.stage.insertMarks.user.StudentResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
