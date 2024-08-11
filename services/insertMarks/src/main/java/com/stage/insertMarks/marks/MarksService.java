@@ -86,7 +86,7 @@ public class MarksService {
     }
 
 
-    public List<StudentResponse> retrieveStudents(String gradeName, String token) {
+    public List<StudentAndMarkResponse> retrieveStudents(String gradeName, int idModule, String token) {
 
         JwtTokenContextHolder.setToken(token.substring(7));
 
@@ -94,8 +94,36 @@ public class MarksService {
                 () -> new IllegalArgumentException("Invalid grade")
         );
 
-        return this.getUsers.getStudents(grade.getIdGrade()).orElseThrow(
+        var students = this.getUsers.getStudents(grade.getIdGrade()).orElseThrow(
                 () -> new RuntimeException("No authenticated user found"));
+
+        List<StudentAndMarkResponse> studentResponses = new ArrayList<>();
+
+        students.forEach(student -> {
+            var mark = studentMarkRepository.findByIdStudentAndModule(student.idUser(), idModule);
+            if (mark == null) {
+                mark = Mark.builder()
+                        .markCc(0)
+                        .markTp(0)
+                        .markExam(0)
+                        .build();
+            }
+            studentResponses.add(StudentAndMarkResponse
+                    .builder()
+                    .student(student)
+                    .marks(
+                            MarksDto
+                                    .builder()
+                                    .exam(mark.getMarkExam())
+                                    .tp(mark.getMarkTp())
+                                    .cc(mark.getMarkCc())
+                                    .build()
+                    )
+                    .build()
+            );
+        });
+
+        return studentResponses;
     }
 
 

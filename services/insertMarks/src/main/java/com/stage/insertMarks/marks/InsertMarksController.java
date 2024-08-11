@@ -25,12 +25,13 @@ public class InsertMarksController {
     }
 
 
-    @PostMapping("/getStudents/{gradeName}")
-    public ResponseEntity<List<StudentResponse>> retrieveStudents(
+    @PostMapping("/getStudents/{gradeName}/{idModule}")
+    public ResponseEntity<List<StudentAndMarkResponse>> retrieveStudents(
             @PathVariable("gradeName") String gradeName,
+            @PathVariable("idModule") int idModule,
             @RequestHeader("Authorization") String headerValue
     ){
-        return ResponseEntity.ok(marksService.retrieveStudents(gradeName,headerValue));
+        return ResponseEntity.ok(marksService.retrieveStudents(gradeName,idModule,headerValue));
     }
 
     @PostMapping("/saveMarks")

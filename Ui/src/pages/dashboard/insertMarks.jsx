@@ -10,10 +10,10 @@ import { Avatar, Typography } from "@material-tailwind/react";
 export function InsertMarks() {
   const [gradesAndModule, setGradesAndModule] = useState([]);
   const [grade, setGrade] = useState("");
-  const [module, setModule] = useState({
+  const [module, setModule] = useState([{
     moduleName: "",
     moduleId: 0,
-  });
+  }]);
   const [studentMarks, setStudentMarks] = useState({});
   const [students, setStudents] = useState([]);
   const user = useSelector((state) => state.user);
@@ -32,7 +32,7 @@ export function InsertMarks() {
 
   useEffect(() => {
     if (grade !== "")
-      loadStudentsForSpecificProfessor(grade).then(data => {
+      loadStudentsForSpecificProfessor(grade, module.moduleId).then(data => {
         setStudents(data);
       });
   }, [grade]);
@@ -65,7 +65,7 @@ export function InsertMarks() {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log("Marks submitted: ", studentMarks);
-    saveStudentsMarks(module.moduleId,studentMarks).then(() => console.log("done"));
+    saveStudentsMarks(module.moduleId, studentMarks).then(() => console.log("done"));
   };
 
   return (
@@ -113,8 +113,8 @@ export function InsertMarks() {
           </tr>
           </thead>
           <tbody>
-          {students.map((student) => (
-            <tr key={student.idUser}>
+          {students.map((data, index) => (
+            <tr key={data.student.idUser}>
               <td className="py-2 px-4 border-b flex justify-start">
                 <div className="flex items-center gap-4">
                   <Avatar src="/img/team-2.jpeg" size="sm" variant="rounded" />
@@ -124,10 +124,10 @@ export function InsertMarks() {
                       color="blue-gray"
                       className="font-semibold"
                     >
-                      {student.firstName + " " + student.lastName}
+                      {data.student.firstName + " " + data.student.lastName}
                     </Typography>
                     <Typography className="text-xs font-normal text-blue-gray-500">
-                      {student.email}
+                      {data.student.email}
                     </Typography>
                   </div>
                 </div>
@@ -136,8 +136,8 @@ export function InsertMarks() {
                 <input
                   type="number"
                   placeholder="Exam Mark"
-                  value={studentMarks[student.idUser]?.exam || ""}
-                  onChange={(e) => handleMarksChange(student.idUser, "exam", e.target.value)}
+                  value={studentMarks[data.student.idUser]?.exam || data.marks.exam}
+                  onChange={(e) => handleMarksChange(data.student.idUser, "exam", e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </td>
@@ -145,8 +145,8 @@ export function InsertMarks() {
                 <input
                   type="number"
                   placeholder="TP"
-                  value={studentMarks[student.idUser]?.tp || -1}
-                  onChange={(e) => handleMarksChange(student.idUser, "tp", e.target.value)}
+                  value={studentMarks[data.student.idUser]?.tp || data.marks.tp}
+                  onChange={(e) => handleMarksChange(data.student.idUser, "tp", e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </td>
@@ -154,8 +154,8 @@ export function InsertMarks() {
                 <input
                   type="number"
                   placeholder="CC"
-                  value={studentMarks[student.idUser]?.cc || ""}
-                  onChange={(e) => handleMarksChange(student.idUser, "cc", e.target.value)}
+                  value={studentMarks[data.student.idUser]?.cc || data.marks.cc}
+                  onChange={(e) => handleMarksChange(data.student.idUser, "cc", e.target.value)}
                   className="border p-2 rounded w-full"
                 />
               </td>
@@ -173,8 +173,8 @@ export function InsertMarks() {
           </button>
         </div>
       </form>
-    </div>
-  );
+    </div>)
+    ;
 };
 
 export default InsertMarks;

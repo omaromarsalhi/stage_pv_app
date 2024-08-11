@@ -24,11 +24,11 @@ export async function saveStudentsMarks(idModule,marks) {
   });
 }
 
-export async function loadStudentsForSpecificProfessor(gradeName) {
+export async function loadStudentsForSpecificProfessor(gradeName,moduleId) {
   return await checkToken().then(() => {
     return  request(
       "POST",
-      "/marks/getStudents/"+gradeName,
+      "/marks/getStudents/"+gradeName+"/"+moduleId,
     ).then(
       (response) => {
         return response.data;
