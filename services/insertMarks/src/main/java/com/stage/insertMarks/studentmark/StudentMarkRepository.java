@@ -12,4 +12,5 @@ public interface StudentMarkRepository extends JpaRepository<StudentMark, Intege
             where studentmark.idStudent=?1 and studentmark.mark.module.idModule= ?2
             """)
     Mark findByIdStudentAndModule(int id, int idModule);
+
 }

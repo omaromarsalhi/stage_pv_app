@@ -52,7 +52,7 @@ async function refreshToken() {
 }
 
 export function getOut() {
-  window.localStorage.removeItem("auth_token");
-  window.localStorage.removeItem("refresh_token");
+  // window.localStorage.removeItem("auth_token");
+  // window.localStorage.removeItem("refresh_token");
   navigate("/auth/sign-in");
 }

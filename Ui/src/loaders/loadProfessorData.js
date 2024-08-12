@@ -15,10 +15,10 @@ export async function saveStudentsMarks(idModule,marks) {
       },
     ).then(
       (response) => {
-        console.log(response);
+        return response.data
       }).catch(
       (error) => {
-        console.log(error);
+        return "error"
       },
     );
   });

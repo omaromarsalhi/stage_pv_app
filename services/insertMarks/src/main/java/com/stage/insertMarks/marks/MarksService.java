@@ -38,13 +38,21 @@ public class MarksService {
             Integer userId = entry.getKey();
             MarksDto marks = entry.getValue();
 
-            var mark = Mark
-                    .builder()
-                    .markCc(marks.cc())
-                    .markTp(marks.tp())
-                    .markExam(marks.exam())
-                    .module(module)
-                    .build();
+            var mark = studentMarkRepository.findByIdStudentAndModule(userId, marksCredentials.idModule());
+
+            if (mark == null) {
+                mark = Mark
+                        .builder()
+                        .markCc(marks.cc())
+                        .markTp(marks.tp())
+                        .markExam(marks.exam())
+                        .module(module)
+                        .build();
+            } else {
+                mark.setMarkExam(marks.exam());
+                mark.setMarkTp(marks.tp());
+                mark.setMarkCc(marks.cc());
+            }
 
             markRepository.save(
                     mark
