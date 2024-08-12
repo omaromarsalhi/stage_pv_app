@@ -32,7 +32,8 @@ export function GeneratePv() {
     identifier: "",
     grade: "",
     level: "",
-    idUser: 0
+    role: "",
+    idUser: 0,
   });
   const user = useSelector((state) => state.user);
 
@@ -213,7 +214,7 @@ export function GeneratePv() {
                         href="#"
                         className="text-[30px] text-blue-gray-600"
                         onClick={() => {
-                          setStudentData({ name, email, identifier,grade, level, idUser });
+                          setStudentData({ name, email, identifier, grade, level, idUser });
                           showPopup();
                         }}
                       >

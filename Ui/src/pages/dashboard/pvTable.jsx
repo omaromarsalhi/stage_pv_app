@@ -27,7 +27,7 @@ export function PvTable({ grade, level, idStudent }) {
   }, [level, idStudent]);
 
   return (
-    <div className="mt-2 mb-2 flex flex-col gap-2">
+    <div className="mt-2 mb-2 flex flex-col gap-2 justify-center items-center">
       <Card>
         <CardBody className="overflow-x-auto overflow-y-auto px-0 pt-0 pb-2" style={{ maxHeight: "400px" }}>
           <table className="w-full max-w-[500px] table-auto ">

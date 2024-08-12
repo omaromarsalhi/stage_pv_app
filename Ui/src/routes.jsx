@@ -9,6 +9,7 @@ import {
 import { Home, Profile, Tables, Notifications, GeneratePv, Test, InsertMarks } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import { RiAiGenerate } from "react-icons/ri";
+import { BsFileEarmarkSpreadsheet } from "react-icons/bs";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -31,35 +32,35 @@ export const routes = [
         element: <GeneratePv />,
       },
       {
-        icon: <RiAiGenerate {...icon} />,
+        icon: <BsFileEarmarkSpreadsheet {...icon} />,
         name: "insertMarks",
         path: "/insertMarks",
         element: <InsertMarks />,
       },
-      {
-        icon: <UserCircleIcon {...icon} />,
-        name: "test",
-        path: "/test",
-        element: <Test />,
-      },
-      {
-        icon: <HomeIcon {...icon} />,
-        name: "dashboard",
-        path: "/home",
-        element: <Home />,
-      },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "tables",
-        path: "/tables",
-        element: <Tables />,
-      },
-      {
-        icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
-        path: "/notifications",
-        element: <Notifications />,
-      },
+      // {
+      //   icon: <UserCircleIcon {...icon} />,
+      //   name: "test",
+      //   path: "/test",
+      //   element: <Test />,
+      // },
+      // {
+      //   icon: <HomeIcon {...icon} />,
+      //   name: "dashboard",
+      //   path: "/home",
+      //   element: <Home />,
+      // },
+      // {
+      //   icon: <TableCellsIcon {...icon} />,
+      //   name: "tables",
+      //   path: "/tables",
+      //   element: <Tables />,
+      // },
+      // {
+      //   icon: <InformationCircleIcon {...icon} />,
+      //   name: "notifications",
+      //   path: "/notifications",
+      //   element: <Notifications />,
+      // },
     ],
   },
   {
